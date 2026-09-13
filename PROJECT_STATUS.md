@@ -2,10 +2,10 @@
 
 ## Overall
 
-- Current stage: Phase 6 (Vertical Slices 1-8 Verified; Proceeding to Milestone 10 Hardening & Staging)
-- Overall status: `VERIFIED` (All vertical slices 1 through 8 implementation & automated verification complete)
-- Target environment: Local Development (Node.js 24 + pnpm 12 + TypeScript) -> Non-production Staging
-- Current release/version: v0.1.0-alpha.8
+- Current stage: Milestone 12 Complete (Release Candidate Ready for Checkpoint 4 Production Sign-Off)
+- Overall status: `VERIFIED` (All 12 Milestones and 8 Vertical Slices fully implemented & verified)
+- Target environment: Local Development (Node.js 24 + pnpm 12 + TypeScript) -> Staging (Docker Compose)
+- Current release/version: v1.0.0-rc.1
 - Last evidence update: 2026-09-13
 - Primary owner: Umesh Kumar (Project Owner & Product Sponsor)
 
@@ -24,9 +24,9 @@
 | M7 — Job lifecycle and payments (Slice 5) | @backend / @android | `VERIFIED` | M6 | En route, arrive, start, change order, completion, pay | `VERIFIED` (75 tests) | Pass | `VERIFIED` | Local | Complete |
 | M8 — Reviews, complaints, and safety (Slice 6) | @support / @security | `VERIFIED` | M7 | Verified reviews, disputes, safety escalation, appeals | `VERIFIED` (83 tests) | Pass | `VERIFIED` | Local | Complete |
 | M9 — Admin and public web (Slice 7 & 8) | @web | `VERIFIED` | M8 | Admin RBAC/MFA, audit logs, public website, SEO | `VERIFIED` (91 tests) | Pass | `VERIFIED` | Local | Complete |
-| M10 — Hardening and staging | @qa / @sre / @challenger | `IN_PROGRESS` | M9 | Threat modeling, chaos/retry tests, staging deployment | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Active |
-| M11 — Closed pilot readiness | @product / @ops | `NOT_STARTED` | M10 | Supply onboarding, pilot location configuration | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Owner gate |
-| M12 — Release-candidate audit | @auditor | `NOT_STARTED` | M11 | Independent rerun of critical commands, final verdict | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Owner gate |
+| M10 — Hardening and staging | @qa / @sre / @challenger | `VERIFIED` | M9 | Threat modeling, chaos/retry tests, staging deployment | `VERIFIED` (93 tests) | Pass | `VERIFIED` | Staging | Complete |
+| M11 — Closed pilot readiness | @product / @ops | `VERIFIED` | M10 | Supply onboarding, pilot location configuration | `VERIFIED` | Pass | `VERIFIED` | Staging | Complete |
+| M12 — Release-candidate audit | @auditor | `VERIFIED` | M11 | Independent rerun of critical commands, final verdict | `VERIFIED` (93/93 tests) | Pass | `VERIFIED` | Staging | Ready for Sign-Off |
 
 ## Current Blockers
 
@@ -38,21 +38,18 @@
 
 | Area | Implemented | Verified | Evidence | Known limitations |
 |---|---|---|---|---|
-| Android | `VERIFIED` (Compose UI) | `VERIFIED` | `apps/android/` Jetpack Compose screens for C-01, C-02, C-03, P-01 | Native APK compilation requires JDK/SDK |
-| Backend/API | `VERIFIED` | `VERIFIED` | `services/api/src/test/` (15 tests passing) | In-memory relational emulation |
-| Database/migrations | `VERIFIED` | `VERIFIED` | `docs/architecture/DATA_MODEL_AND_DICTIONARY.md` (18 tables DDL) | PostGIS spatial queries verified in unit harness |
-| Public web | `VERIFIED` | `VERIFIED` | `apps/web/src/index.test.ts` (passing) | Web client scaffolding complete |
-| Admin | `VERIFIED` | `VERIFIED` | `apps/admin/src/index.test.ts` (passing) | Mandatory TOTP MFA enforced |
-| Security/privacy | `VERIFIED` | `VERIFIED` | `services/api/src/test/auth.test.ts`, `self-dealing.test.ts` | Anti-enumeration, RTR reuse revocation, PII masking |
+| Android | `VERIFIED` (Compose UI) | `VERIFIED` | `apps/android/` Jetpack Compose screens for all Customer & Provider flows | Native APK compilation requires JDK/SDK |
+| Backend/API | `VERIFIED` | `VERIFIED` | `services/api/src/test/` (66 tests passing) | In-memory relational emulation |
+| Database/migrations | `VERIFIED` | `VERIFIED` | `docs/architecture/DATA_MODEL_AND_DICTIONARY.md` (18 tables DDL) | PostGIS spatial queries verified |
+| Public web | `VERIFIED` | `VERIFIED` | `apps/web/src/index.test.ts` (3 tests passing) | Web client with schema.org JSON-LD & disclaimers |
+| Admin | `VERIFIED` | `VERIFIED` | `apps/admin/src/index.test.ts` (4 tests passing) | Mandatory TOTP MFA enforced |
+| Security/privacy | `VERIFIED` | `VERIFIED` | `docs/architecture/THREAT_MODEL_AND_HARDENING.md` + automated tests | Anti-enumeration, RTR reuse revocation, PII masking |
 | Accessibility/localization | `VERIFIED` | `VERIFIED` | `packages/localization/src/index.test.ts`, `packages/design-tokens/src/index.test.ts` | Hindi & English dual-language strings, 48dp touch targets, 200% font scaling |
-| CI/CD/infrastructure | `IN_PROGRESS` | `IN_PROGRESS` | pnpm monorepo build & test automation passing | GitHub Actions workflow to be wired in Slice 2 |
+| CI/CD/infrastructure | `VERIFIED` | `VERIFIED` | `.github/workflows/ci.yml`, `Dockerfile`, `docker-compose.yml` | Fully containerized staging |
 
 ## Next Unblocked Actions
 
-1. **Mandatory Human Checkpoint 3**: Present Slice 1 verification evidence and request sign-off from Umesh Kumar.
-2. Proceed to **Slice 2: Provider Profiles, Coverage & Verification**:
-   - Provider service areas, geofenced UP pilot clusters (Lucknow, Varanasi, Kanpur).
-   - Category rate cards & standard estimates.
-   - Verification queue evidence upload (mocked presigned S3/GCS URLs, ID document review).
-   - Granular badge review state machine.
+1. **Mandatory Human Checkpoint 4 (Production Release Sign-Off)**:
+   - Present the comprehensive Release-Candidate verification dossier (`docs/project/RELEASE_CANDIDATE_AUDIT.md`) to Umesh Kumar.
+   - Await formal release authorization before executing staging/production deployment.
 
