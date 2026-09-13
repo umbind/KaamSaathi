@@ -14,6 +14,7 @@ import { BookingService } from './modules/booking/booking.service.js';
 import { JobService } from './modules/job/job.service.js';
 import { ReviewAndSafetyService } from './modules/review/review.service.js';
 import { AdminOperationsService } from './modules/admin/admin-operations.service.js';
+import { getInteractivePortalHtml } from './common/portal.html.js';
 
 export class App {
   public readonly identityService = new IdentityService();
@@ -110,7 +111,14 @@ export class App {
       let responseBody: any = null;
       let statusCode = 200;
 
-      // 0. Health check probe
+      // 0. Interactive Web Portal & Health check probe
+      if (method === 'GET' && (pathname === '/' || pathname === '/index.html')) {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.statusCode = 200;
+        res.end(getInteractivePortalHtml());
+        return;
+      }
+
       if (method === 'GET' && pathname === '/health') {
         responseBody = {
           status: 'healthy',
