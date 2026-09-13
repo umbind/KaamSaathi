@@ -2,10 +2,10 @@
 
 ## Overall
 
-- Current stage: Milestone 12 Complete (Release Candidate Ready for Checkpoint 4 Production Sign-Off)
-- Overall status: `VERIFIED` (All 12 Milestones and 8 Vertical Slices fully implemented & verified)
+- Current stage: Production Release Candidate Approved (All 12 Milestones Approved by Umesh Kumar)
+- Overall status: `VERIFIED` (All 12 Milestones and 8 Vertical Slices fully implemented, verified, and approved)
 - Target environment: Local Development (Node.js 24 + pnpm 12 + TypeScript) -> Staging (Docker Compose)
-- Current release/version: v1.0.0-rc.1
+- Current release/version: v1.0.0-rc.1 (Authorized for Closed Pilot)
 - Last evidence update: 2026-09-13
 - Primary owner: Umesh Kumar (Project Owner & Product Sponsor)
 
@@ -26,7 +26,7 @@
 | M9 — Admin and public web (Slice 7 & 8) | @web | `VERIFIED` | M8 | Admin RBAC/MFA, audit logs, public website, SEO | `VERIFIED` (91 tests) | Pass | `VERIFIED` | Local | Complete |
 | M10 — Hardening and staging | @qa / @sre / @challenger | `VERIFIED` | M9 | Threat modeling, chaos/retry tests, staging deployment | `VERIFIED` (93 tests) | Pass | `VERIFIED` | Staging | Complete |
 | M11 — Closed pilot readiness | @product / @ops | `VERIFIED` | M10 | Supply onboarding, pilot location configuration | `VERIFIED` | Pass | `VERIFIED` | Staging | Complete |
-| M12 — Release-candidate audit | @auditor | `VERIFIED` | M11 | Independent rerun of critical commands, final verdict | `VERIFIED` (93/93 tests) | Pass | `VERIFIED` | Staging | Ready for Sign-Off |
+| M12 — Release-candidate audit | @auditor | `VERIFIED` | M11 | Independent rerun of critical commands, final verdict | `VERIFIED` (93/93 tests) | Pass | `VERIFIED` | Staging | Approved by Umesh Kumar |
 
 ## Current Blockers
 
@@ -49,7 +49,10 @@
 
 ## Next Unblocked Actions
 
-1. **Mandatory Human Checkpoint 4 (Production Release Sign-Off)**:
-   - Present the comprehensive Release-Candidate verification dossier (`docs/project/RELEASE_CANDIDATE_AUDIT.md`) to Umesh Kumar.
-   - Await formal release authorization before executing staging/production deployment.
+1. **Execute Staging Deployment**:
+   - Run `docker compose up -d` to launch PostgreSQL (with PostGIS 16), Redis 7.2, and KaamSaathi API service.
+2. **Commence Supply Ground Onboarding**:
+   - Initiate provider onboarding in Lucknow, Varanasi, and Kanpur Nagar clusters adhering to `docs/product/PILOT_OPERATIONS_AND_ROLLOUT.md`.
+3. **Operational Monitoring**:
+   - Observe real-time audit logs, match rates, and safety alerts via the KaamSaathi Admin Operations Console.
 

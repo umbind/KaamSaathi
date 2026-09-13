@@ -1,4 +1,4 @@
-﻿# KaamSaathi Release-Candidate Audit and Verification Dossier
+# KaamSaathi Release-Candidate Audit and Verification Dossier
 
 **Document Reference**: `AUDIT-RC-001`  
 **Evaluation Date**: September 2026  
@@ -120,6 +120,7 @@ Status:                     RECOMMENDED FOR PRODUCTION RELEASE CANDIDATE
 Date:                       2026-09-13
 
 Product Owner & Sponsor:    Umesh Kumar
-Signature / Authorization:  [ PENDING HUMAN CHECKPOINT 4 SIGN-OFF ]
+Signature / Authorization:  APPROVED BY UMESH KUMAR (2026-09-13)
+Release Authorization:      FORMALLY AUTHORIZED & SIGNED-OFF FOR STAGING & PILOT DEPLOYMENT
 ========================================================================================
 ```

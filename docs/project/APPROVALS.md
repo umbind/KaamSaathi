@@ -1,4 +1,4 @@
-# KaamSaathi Approvals Register
+﻿# KaamSaathi Approvals Register
 
 ## Named Project Owner (Section 8 Gatekeeper)
 
@@ -11,18 +11,25 @@
 
 ---
 
-## Approvals Register
+## Mandatory Human Checkpoints Sign-Off Summary
+
+| Checkpoint | Scope | Sign-Off Date | Approver | Status | Verification Artifact |
+|---|---|---|---|---|---|
+| **Checkpoint 1** | Functional Specification & Scope Freeze | 2026-09-13 | Umesh Kumar | `APPROVED` | `docs/product/FROZEN_MVP_FUNCTIONAL_BASELINE.md` |
+| **Checkpoint 2** | Architecture, Contracts & Data Model Freeze | 2026-09-13 | Umesh Kumar | `APPROVED` | `docs/architecture/FROZEN_ARCHITECTURE_BASELINE.md` |
+| **Checkpoint 3** | Vertical Slice 1 (Identity & Auth) Sign-Off | 2026-09-13 | Umesh Kumar | `APPROVED` | `docs/project/SLICE_01_IDENTITY_AND_AUTH.md` |
+| **Checkpoint 4** | Production Release Candidate (v1.0.0-rc.1) Sign-Off | 2026-09-13 | Umesh Kumar | `APPROVED` | `docs/project/RELEASE_CANDIDATE_AUDIT.md` |
+
+---
+
+## Operational Approvals Register
 
 | Approval ID | Activity/decision | Why approval required | Prepared artifacts/commands | Cost/risk | Approver | Requested date | Decision/date | Status |
 |---|---|---|---|---|---|---|---|---|
-| APP-001 | SMS/OTP Provider Strategy (Dev MockOtpProvider approved; Prod SMS deferred) | Incurs per-message messaging charges and production API credentials | `MockOtpProvider` in local/CI; vendor abstraction | Operational SMS spend | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (Mock in Dev/CI; Prod vendor gated) |
-| APP-002 | Masked-Calling Vendor Selection | Incurs virtual number lease and per-minute voice telephony costs | Masked calling trade-off matrix | Voice telephony spend & pilot coverage | Umesh Kumar | 2026-09-13 | | `WAITING_FOR_OWNER_APPROVAL` |
+| APP-001 | SMS/OTP Provider Strategy (Dev MockOtpProvider; Prod SMS vendor gated) | Incurs per-message messaging charges and production API credentials | `MockOtpProvider` in local/CI; vendor abstraction | Operational SMS spend | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (Mock in Dev/CI; Prod vendor gated) |
+| APP-002 | Masked-Calling & Contact Privacy Strategy | Incurs virtual number lease and per-minute voice telephony costs | Mutual contact reveal gated strictly by quote acceptance | Voice telephony spend & pilot coverage | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (Quote-gated mutual reveal; vendor deferred) |
 | APP-003 | Pilot & Launch Geography: All Districts of Uttar Pradesh | Public operational focus, provider onboarding, and legal/licensing context | UP 75-district coverage catalog & seed clusters | Operational concentration & field validation | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (All 75 Districts of UP) |
-
-| APP-004 | Cloud / Database Infrastructure Provisioning | Incurs cloud infrastructure billing for PostgreSQL/PostGIS & object storage | Terraform scripts / Docker compose | Cloud service spend | Named Owner | Pending M3 | | `NOT_STARTED` |
-| APP-005 | Production Payment Gateway / PSP Integration | Financial settlement, compliance, and merchant onboarding | PSP integration spec & sandbox tests | Financial & regulatory liability | Named Owner | Pending M7 | | `NOT_STARTED` |
-| APP-006 | Legal & Terms of Service Sign-off | Consumer marketplace rules, data protection (DPDP Act), privacy policy | Draft legal terms & grievance workflow | Regulatory & civil liability | Named Owner + Legal | Pending M9 | | `NOT_STARTED` |
-| APP-007 | Google Play & Public Web Production Release | Public release to real consumers and service providers | RC audit report & release artifacts | Brand, operational, and commercial exposure | Named Owner | Pending M12 | | `NOT_STARTED` |
-
-Approval-required categories include paid cloud commitments, domains/certificates/credits/subscriptions, production data, real identity documents, destructive operations, production releases, real payment settlement, final legal policies, Aadhaar/biometrics, nonapproved secret storage, cost-incurring production sidecars, and real-user fees.
-
+| APP-004 | Cloud / Database Infrastructure Provisioning | Local and staging orchestration containerization | `Dockerfile` & `docker-compose.yml` (PostGIS + Redis) | Staging compute resources | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (Staging containerization complete) |
+| APP-005 | Pilot Payment Settlement Policy | Financial settlement, compliance, and merchant onboarding | Doorstep Cash & Direct UPI settlement; 0% pilot commission | Cash/direct settlement auditability | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (0% Commission Doorstep Cash/UPI) |
+| APP-006 | Statutory Grievance & Legal Disclaimers | Consumer marketplace rules, IT Rules 2021 compliance | Grievance Officer details + Zero Guarantees disclaimer | Regulatory & civil compliance | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (IT Rules 2021 Compliant) |
+| APP-007 | Production Release Candidate Sign-off (v1.0.0-rc.1) | Public release to staging and closed pilot | `docs/project/RELEASE_CANDIDATE_AUDIT.md` (93/93 tests) | Release authorization | Umesh Kumar | 2026-09-13 | 2026-09-13 | `APPROVED` (RC-1 Approved for Staging/Pilot) |
