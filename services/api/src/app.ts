@@ -12,6 +12,7 @@ import { AdminVerificationService } from './modules/admin/admin-verification.ser
 import { RequestService } from './modules/request/request.service.js';
 import { BookingService } from './modules/booking/booking.service.js';
 import { JobService } from './modules/job/job.service.js';
+import { ReviewAndSafetyService } from './modules/review/review.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
@@ -21,6 +22,7 @@ export class App {
   public readonly requestService = new RequestService();
   public readonly bookingService = new BookingService();
   public readonly jobService = new JobService();
+  public readonly reviewService = new ReviewAndSafetyService();
 
   async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const correlationId = (req.headers['x-correlation-id'] as string) || crypto.randomUUID();
@@ -278,6 +280,47 @@ export class App {
         const paymentId = parts[4];
         if (!paymentId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_payment_id');
         responseBody = await this.jobService.confirmPayment(authUser.sub, paymentId, body, correlationId);
+      }
+      
+      // 8. Reviews, Disputes, and Safety (Slice 6)
+      else if (method === 'POST' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/reviews')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.reviewService.createReview(authUser.sub, bookingId, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/reviews/') && pathname.endsWith('/respond')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const reviewId = parts[4];
+        if (!reviewId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_review_id');
+        responseBody = await this.reviewService.respondToReview(authUser.sub, reviewId, body, correlationId);
+      } else if (method === 'GET' && pathname.startsWith('/api/v1/providers/') && pathname.endsWith('/reviews')) {
+        const parts = pathname.split('/');
+        const providerId = parts[4];
+        if (!providerId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_provider_id');
+        responseBody = await this.reviewService.getProviderReviews(providerId);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/disputes')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.reviewService.fileDispute(authUser.sub, bookingId, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'GET' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/disputes')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.reviewService.getDisputesForBooking(authUser.sub, bookingId);
+      } else if (method === 'POST' && pathname === '/api/v1/safety/incidents') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.reviewService.reportSafetyIncident(authUser.sub, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'GET' && pathname === '/api/v1/provider/earnings') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.reviewService.getProviderEarningsSummary(authUser.sub);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

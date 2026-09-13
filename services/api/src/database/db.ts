@@ -1,5 +1,14 @@
-import crypto from 'node:crypto';
-import { CustomerProfileDto, ProviderProfileDto, UserDto, IdempotencyRecord } from '@kaamsaathi/contracts';
+import {
+  CustomerProfileDto,
+  ProviderProfileDto,
+  UserDto,
+  IdempotencyRecord,
+  DisputeReason,
+  DisputeStatus,
+  SafetySeverity,
+  SafetyCategory,
+  SafetyIncidentStatus,
+} from '@kaamsaathi/contracts';
 
 export interface UserRecord {
   id: string;
@@ -175,6 +184,7 @@ export interface BookingRecord {
   total_agreed_estimate_paise: number;
   scheduled_window: string;
   consent_contact_reveal: boolean;
+  is_disputed?: boolean;
   version: number;
   created_at: Date;
   updated_at: Date;
@@ -202,6 +212,48 @@ export interface PaymentRecord {
   status: 'PROVIDER_DECLARED' | 'CONFIRMED' | 'DISPUTED';
   declared_at: Date;
   confirmed_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface ReviewRecord {
+  id: string;
+  booking_id: string;
+  customer_id: string;
+  provider_id: string;
+  rating: number;
+  comment?: string;
+  provider_response?: string;
+  provider_responded_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface DisputeRecord {
+  id: string;
+  booking_id: string;
+  filed_by_id: string;
+  filed_by_role: 'CUSTOMER' | 'PROVIDER';
+  reason: DisputeReason;
+  description: string;
+  evidence_keys: string[];
+  status: DisputeStatus;
+  resolution_notes?: string;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface SafetyIncidentRecord {
+  id: string;
+  reporter_id: string;
+  booking_id?: string;
+  category: SafetyCategory;
+  description: string;
+  severity: SafetySeverity;
+  status: SafetyIncidentStatus;
+  locality?: string;
+  district?: string;
+  is_priority: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -237,6 +289,9 @@ export class InMemoryDatabase {
   private bookings = new Map<string, BookingRecord>();
   private changeOrders = new Map<string, ChangeOrderRecord>();
   private payments = new Map<string, PaymentRecord>();
+  private reviews = new Map<string, ReviewRecord>();
+  private disputes = new Map<string, DisputeRecord>();
+  private safetyIncidents = new Map<string, SafetyIncidentRecord>();
   private idempotency = new Map<string, IdempotencyRecord>();
   private auditLogs: AuditLogRecord[] = [];
   private auditIdSequence = 1;
@@ -260,6 +315,9 @@ export class InMemoryDatabase {
     this.bookings.clear();
     this.changeOrders.clear();
     this.payments.clear();
+    this.reviews.clear();
+    this.disputes.clear();
+    this.safetyIncidents.clear();
     this.idempotency.clear();
     this.auditLogs = [];
     this.auditIdSequence = 1;
@@ -549,6 +607,56 @@ export class InMemoryDatabase {
 
   findPaymentByBookingId(bookingId: string): PaymentRecord | undefined {
     return Array.from(this.payments.values()).find(p => p.booking_id === bookingId);
+  }
+
+  // Reviews
+  saveReview(review: ReviewRecord): ReviewRecord {
+    this.reviews.set(review.id, { ...review, updated_at: new Date() });
+    return review;
+  }
+
+  findReviewById(id: string): ReviewRecord | undefined {
+    return this.reviews.get(id);
+  }
+
+  findReviewByBookingId(bookingId: string): ReviewRecord | undefined {
+    return Array.from(this.reviews.values()).find(r => r.booking_id === bookingId);
+  }
+
+  findReviewsByProviderId(providerId: string): ReviewRecord[] {
+    return Array.from(this.reviews.values()).filter(r => r.provider_id === providerId);
+  }
+
+  // Disputes
+  saveDispute(dispute: DisputeRecord): DisputeRecord {
+    this.disputes.set(dispute.id, { ...dispute, updated_at: new Date() });
+    return dispute;
+  }
+
+  findDisputeById(id: string): DisputeRecord | undefined {
+    return this.disputes.get(id);
+  }
+
+  findDisputesByBookingId(bookingId: string): DisputeRecord[] {
+    return Array.from(this.disputes.values()).filter(d => d.booking_id === bookingId);
+  }
+
+  // Safety Incidents
+  saveSafetyIncident(incident: SafetyIncidentRecord): SafetyIncidentRecord {
+    this.safetyIncidents.set(incident.id, { ...incident, updated_at: new Date() });
+    return incident;
+  }
+
+  findSafetyIncidentById(id: string): SafetyIncidentRecord | undefined {
+    return this.safetyIncidents.get(id);
+  }
+
+  findSafetyIncidentsByReporterId(reporterId: string): SafetyIncidentRecord[] {
+    return Array.from(this.safetyIncidents.values()).filter(s => s.reporter_id === reporterId);
+  }
+
+  getAllSafetyIncidents(): SafetyIncidentRecord[] {
+    return Array.from(this.safetyIncidents.values());
   }
 
   // Idempotency
