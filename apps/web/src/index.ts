@@ -1,4 +1,4 @@
-import { OtpRequestPayload, OtpVerifyPayload, AuthSessionResponse } from '@kaamsaathi/contracts';
+import { OtpRequestPayload, OtpVerifyPayload, AuthSessionResponse, CategoryDto } from '@kaamsaathi/contracts';
 import { t } from '@kaamsaathi/localization';
 
 export class KaamSaathiWebClient {
@@ -19,6 +19,16 @@ export class KaamSaathiWebClient {
 
   getLocalizedText(key: string, params?: Record<string, string | number>): string {
     return t(key, this.currentLanguage, params);
+  }
+
+  async getCategories(): Promise<CategoryDto[]> {
+    const res = await fetch(`${this.apiBaseUrl}/api/v1/categories`, {
+      method: 'GET',
+      headers: {
+        'Accept-Language': this.currentLanguage
+      }
+    });
+    return res.json() as Promise<CategoryDto[]>;
   }
 
   async requestOtp(payload: OtpRequestPayload, idempotencyKey: string): Promise<unknown> {

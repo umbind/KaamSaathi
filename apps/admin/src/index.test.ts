@@ -25,7 +25,26 @@ test('Admin Portal Client Security Invariants', async (t) => {
           totp_code: '123'
         });
       },
-      /TOTP MFA code is mandatory/
+      (err: any) => /TOTP MFA code is mandatory/.test(err.message)
+    );
+  });
+
+  await t.test('Admin verification review requires active session and non-empty rejection notes', async () => {
+    const client = new AdminPortalService('http://localhost:3000');
+
+    // Unauthenticated call throws error
+    await assert.rejects(
+      async () => {
+        await client.getPendingVerifications();
+      },
+      /Authentication required/
+    );
+
+    await assert.rejects(
+      async () => {
+        await client.reviewVerification('sub_1', { decision: 'REJECT', review_notes: '' });
+      },
+      /Authentication required/
     );
   });
 });

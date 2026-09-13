@@ -8,11 +8,13 @@ import { db } from './database/db.js';
 import { IdentityService } from './modules/identity/identity.service.js';
 import { CustomerService } from './modules/customer/customer.service.js';
 import { ProviderService } from './modules/provider/provider.service.js';
+import { AdminVerificationService } from './modules/admin/admin-verification.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
   public readonly customerService = new CustomerService();
   public readonly providerService = new ProviderService();
+  public readonly adminVerificationService = new AdminVerificationService();
 
   async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const correlationId = (req.headers['x-correlation-id'] as string) || crypto.randomUUID();
@@ -132,6 +134,11 @@ export class App {
         responseBody = await this.customerService.saveProfile(authUser.sub, body, correlationId);
       }
       
+      // 2.5 Categories (Public)
+      else if (method === 'GET' && pathname === '/api/v1/categories') {
+        responseBody = await this.providerService.getCategories();
+      }
+
       // 3. Provider routes
       else if (method === 'POST' && pathname === '/api/v1/provider/onboard') {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
@@ -139,7 +146,50 @@ export class App {
         statusCode = 201;
       } else if (method === 'GET' && pathname === '/api/v1/provider/profile') {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
         responseBody = await this.providerService.getProfile(authUser.sub);
+      } else if (method === 'PUT' && pathname === '/api/v1/provider/profile') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.updateProfile(authUser.sub, body, correlationId);
+      } else if (method === 'GET' && pathname === '/api/v1/provider/coverage') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.getCoverage(authUser.sub);
+      } else if (method === 'PUT' && pathname === '/api/v1/provider/coverage') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.setCoverage(authUser.sub, body, correlationId);
+      } else if (method === 'GET' && pathname === '/api/v1/provider/services') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.getServices(authUser.sub);
+      } else if (method === 'PUT' && pathname === '/api/v1/provider/services') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.setServices(authUser.sub, body, correlationId);
+      } else if (method === 'PUT' && pathname === '/api/v1/provider/availability') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.setAvailability(authUser.sub, body, correlationId);
+      } else if (method === 'POST' && pathname === '/api/v1/provider/verification') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.providerService.submitVerification(authUser.sub, body, correlationId);
+        statusCode = 201;
+      }
+
+      // 4. Admin Verification routes
+      else if (method === 'GET' && pathname === '/api/v1/admin/verifications/queue') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.adminVerificationService.getPendingQueue(authUser.sub);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/admin/verifications/') && pathname.endsWith('/review')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        // e.g. ['', 'api', 'v1', 'admin', 'verifications', ':id', 'review']
+        const submissionId = parts[5];
+        if (!submissionId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_submission_id');
+        responseBody = await this.adminVerificationService.reviewSubmission(authUser.sub, submissionId, body, correlationId);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

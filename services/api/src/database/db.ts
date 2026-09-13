@@ -67,9 +67,50 @@ export interface ProviderProfileRecord {
   rating_avg: number;
   rating_count: number;
   completed_jobs_count: number;
-  badges_summary: Array<{ code: string; label: string; verified_at: string }>;
+  badges_summary: Array<{ code: string; label: string; reviewed_item: string; verified_at: string }>;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface CategoryRecord {
+  id: string;
+  name_en: string;
+  name_hi: string;
+  icon_name: string;
+  display_order: number;
+  is_active: boolean;
+}
+
+export interface ProviderCoverageRecord {
+  id: string;
+  provider_id: string;
+  district_id: string;
+  latitude: number;
+  longitude: number;
+  radius_meters: number;
+  created_at: Date;
+}
+
+export interface ProviderServiceRecord {
+  id: string;
+  provider_id: string;
+  category_id: string;
+  visitation_fee_paise: number;
+  pricing_notes?: string;
+  created_at: Date;
+}
+
+export interface VerificationSubmissionRecord {
+  id: string;
+  provider_id: string;
+  document_type: 'GOVT_PHOTO_ID' | 'TRADE_CERT' | 'POLICE_CLEARANCE';
+  storage_path: string;
+  status: 'IN_REVIEW' | 'APPROVED' | 'REJECTED';
+  reviewer_id?: string;
+  review_notes?: string;
+  badge_granted?: string;
+  reviewed_at?: Date;
+  created_at: Date;
 }
 
 export interface AuditLogRecord {
@@ -93,9 +134,17 @@ export class InMemoryDatabase {
   private otpChallenges: OtpChallengeRecord[] = [];
   private customerProfiles = new Map<string, CustomerProfileRecord>();
   private providerProfiles = new Map<string, ProviderProfileRecord>();
+  private categories = new Map<string, CategoryRecord>();
+  private providerCoverage = new Map<string, ProviderCoverageRecord>();
+  private providerServices = new Map<string, ProviderServiceRecord[]>();
+  private verificationSubmissions = new Map<string, VerificationSubmissionRecord>();
   private idempotency = new Map<string, IdempotencyRecord>();
   private auditLogs: AuditLogRecord[] = [];
   private auditIdSequence = 1;
+
+  constructor() {
+    this.seedCategories();
+  }
 
   reset(): void {
     this.users.clear();
@@ -103,9 +152,25 @@ export class InMemoryDatabase {
     this.otpChallenges = [];
     this.customerProfiles.clear();
     this.providerProfiles.clear();
+    this.providerCoverage.clear();
+    this.providerServices.clear();
+    this.verificationSubmissions.clear();
     this.idempotency.clear();
     this.auditLogs = [];
     this.auditIdSequence = 1;
+    this.seedCategories();
+  }
+
+  private seedCategories(): void {
+    this.categories.clear();
+    const defaults: CategoryRecord[] = [
+      { id: 'electrician', name_en: 'Electrician', name_hi: 'बिजली मिस्त्री', icon_name: 'zap', display_order: 1, is_active: true },
+      { id: 'plumber', name_en: 'Plumber', name_hi: 'नल मिस्त्री', icon_name: 'droplet', display_order: 2, is_active: true },
+      { id: 'appliance_repair', name_en: 'Appliance Repair', name_hi: 'उपकरण मरम्मत', icon_name: 'cpu', display_order: 3, is_active: true },
+    ];
+    for (const cat of defaults) {
+      this.categories.set(cat.id, cat);
+    }
   }
 
   // Users
@@ -215,6 +280,62 @@ export class InMemoryDatabase {
   saveProviderProfile(profile: ProviderProfileRecord): ProviderProfileRecord {
     this.providerProfiles.set(profile.id, { ...profile, updated_at: new Date() });
     return profile;
+  }
+
+  findProviderProfileById(id: string): ProviderProfileRecord | undefined {
+    return this.providerProfiles.get(id);
+  }
+
+  // Categories
+  getCategories(): CategoryRecord[] {
+    return Array.from(this.categories.values()).filter(c => c.is_active);
+  }
+
+  getCategoryById(id: string): CategoryRecord | undefined {
+    return this.categories.get(id);
+  }
+
+  // Provider Coverage
+  saveProviderCoverage(coverage: ProviderCoverageRecord): ProviderCoverageRecord {
+    this.providerCoverage.set(coverage.provider_id, coverage);
+    return coverage;
+  }
+
+  getProviderCoverage(providerId: string): ProviderCoverageRecord | undefined {
+    return this.providerCoverage.get(providerId);
+  }
+
+  // Provider Services
+  saveProviderServices(providerId: string, services: ProviderServiceRecord[]): ProviderServiceRecord[] {
+    this.providerServices.set(providerId, services);
+    return services;
+  }
+
+  getProviderServices(providerId: string): ProviderServiceRecord[] {
+    return this.providerServices.get(providerId) || [];
+  }
+
+  // Verification Submissions
+  createVerificationSubmission(sub: VerificationSubmissionRecord): VerificationSubmissionRecord {
+    this.verificationSubmissions.set(sub.id, sub);
+    return sub;
+  }
+
+  updateVerificationSubmission(sub: VerificationSubmissionRecord): VerificationSubmissionRecord {
+    this.verificationSubmissions.set(sub.id, sub);
+    return sub;
+  }
+
+  getVerificationSubmissionById(id: string): VerificationSubmissionRecord | undefined {
+    return this.verificationSubmissions.get(id);
+  }
+
+  getVerificationSubmissions(providerId: string): VerificationSubmissionRecord[] {
+    return Array.from(this.verificationSubmissions.values()).filter(s => s.provider_id === providerId);
+  }
+
+  getPendingVerifications(): VerificationSubmissionRecord[] {
+    return Array.from(this.verificationSubmissions.values()).filter(s => s.status === 'IN_REVIEW');
   }
 
   // Idempotency
