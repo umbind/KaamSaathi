@@ -113,6 +113,38 @@ export interface VerificationSubmissionRecord {
   created_at: Date;
 }
 
+export interface RequestRecord {
+  id: string;
+  customer_id: string;
+  category_id: string;
+  request_type: 'TARGETED' | 'BROADCAST';
+  target_provider_id?: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'MATCHING' | 'LEAD_DISPATCHED' | 'QUOTES_RECEIVED' | 'CANCELLED';
+  district_id: string;
+  locality_name: string;
+  pin_code: string;
+  latitude?: number;
+  longitude?: number;
+  description: string;
+  preferred_schedule_window?: string;
+  media_attachment_paths: string[];
+  dispatched_leads_count: number;
+  version: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface LeadRecord {
+  id: string;
+  request_id: string;
+  provider_id: string;
+  status: 'DISPATCHED' | 'VIEWED' | 'DECLINED' | 'QUOTED' | 'EXPIRED';
+  decline_reason?: string;
+  expires_at: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface AuditLogRecord {
   id: number;
   entity_name: string;
@@ -138,6 +170,8 @@ export class InMemoryDatabase {
   private providerCoverage = new Map<string, ProviderCoverageRecord>();
   private providerServices = new Map<string, ProviderServiceRecord[]>();
   private verificationSubmissions = new Map<string, VerificationSubmissionRecord>();
+  private requests = new Map<string, RequestRecord>();
+  private leads = new Map<string, LeadRecord>();
   private idempotency = new Map<string, IdempotencyRecord>();
   private auditLogs: AuditLogRecord[] = [];
   private auditIdSequence = 1;
@@ -155,6 +189,8 @@ export class InMemoryDatabase {
     this.providerCoverage.clear();
     this.providerServices.clear();
     this.verificationSubmissions.clear();
+    this.requests.clear();
+    this.leads.clear();
     this.idempotency.clear();
     this.auditLogs = [];
     this.auditIdSequence = 1;
@@ -338,6 +374,42 @@ export class InMemoryDatabase {
     return Array.from(this.verificationSubmissions.values()).filter(s => s.status === 'IN_REVIEW');
   }
 
+  // Requests
+  saveRequest(req: RequestRecord): RequestRecord {
+    this.requests.set(req.id, { ...req, updated_at: new Date() });
+    return req;
+  }
+
+  findRequestById(id: string): RequestRecord | undefined {
+    return this.requests.get(id);
+  }
+
+  findRequestsByCustomerId(customerId: string): RequestRecord[] {
+    return Array.from(this.requests.values()).filter(r => r.customer_id === customerId);
+  }
+
+  // Leads
+  saveLead(lead: LeadRecord): LeadRecord {
+    this.leads.set(lead.id, { ...lead, updated_at: new Date() });
+    return lead;
+  }
+
+  findLeadById(id: string): LeadRecord | undefined {
+    return this.leads.get(id);
+  }
+
+  findLeadsByProviderId(providerId: string): LeadRecord[] {
+    return Array.from(this.leads.values()).filter(l => l.provider_id === providerId);
+  }
+
+  findLeadsByRequestId(requestId: string): LeadRecord[] {
+    return Array.from(this.leads.values()).filter(l => l.request_id === requestId);
+  }
+
+  getAllProviderProfiles(): ProviderProfileRecord[] {
+    return Array.from(this.providerProfiles.values());
+  }
+
   // Idempotency
   getIdempotency(key: string): IdempotencyRecord | undefined {
     const rec = this.idempotency.get(key);
@@ -363,7 +435,10 @@ export class InMemoryDatabase {
     return rec;
   }
 
-  getAuditLogs(): AuditLogRecord[] {
+  getAuditLogs(entityName?: string): AuditLogRecord[] {
+    if (entityName) {
+      return this.auditLogs.filter(l => l.entity_name === entityName);
+    }
     return [...this.auditLogs];
   }
 }

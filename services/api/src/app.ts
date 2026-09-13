@@ -9,12 +9,14 @@ import { IdentityService } from './modules/identity/identity.service.js';
 import { CustomerService } from './modules/customer/customer.service.js';
 import { ProviderService } from './modules/provider/provider.service.js';
 import { AdminVerificationService } from './modules/admin/admin-verification.service.js';
+import { RequestService } from './modules/request/request.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
   public readonly customerService = new CustomerService();
   public readonly providerService = new ProviderService();
   public readonly adminVerificationService = new AdminVerificationService();
+  public readonly requestService = new RequestService();
 
   async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const correlationId = (req.headers['x-correlation-id'] as string) || crypto.randomUUID();
@@ -190,6 +192,28 @@ export class App {
         const submissionId = parts[5];
         if (!submissionId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_submission_id');
         responseBody = await this.adminVerificationService.reviewSubmission(authUser.sub, submissionId, body, correlationId);
+      }
+      
+      // 5. Discovery & Service Requests (Slice 3)
+      else if (method === 'GET' && pathname === '/api/v1/services/search') {
+        const query = url.searchParams.get('q') || url.searchParams.get('query') || '';
+        const districtId = url.searchParams.get('district_id') || undefined;
+        const lang = (url.searchParams.get('lang') as 'hi' | 'en') || 'hi';
+        responseBody = await this.requestService.searchServices(query, districtId, lang);
+      } else if (method === 'POST' && pathname === '/api/v1/uploads/presigned') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.requestService.createPresignedUpload(authUser.sub, body, correlationId);
+      } else if (method === 'POST' && pathname === '/api/v1/requests') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.requestService.createRequest(authUser.sub, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'GET' && pathname === '/api/v1/customer/requests') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.requestService.getCustomerRequests(authUser.sub);
+      } else if (method === 'GET' && pathname === '/api/v1/provider/leads') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.requestService.getProviderLeads(authUser.sub);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

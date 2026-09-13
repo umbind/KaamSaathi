@@ -2,10 +2,10 @@
 
 ## Overall
 
-- Current stage: Phase 5 (Vertical Slice 1 Verified; Checkpoint 3 Sign-Off Pending)
-- Overall status: `IN_PROGRESS` (Slice 1 implementation & automated verification complete)
+- Current stage: Phase 5 (Vertical Slice 3 Verified; Proceeding to Slice 4 Quotes & Booking)
+- Overall status: `IN_PROGRESS` (Slices 1, 2, and 3 implementation & automated verification complete)
 - Target environment: Local Development (Node.js 24 + pnpm 12 + TypeScript) -> Non-production Staging
-- Current release/version: v0.1.0-alpha.1
+- Current release/version: v0.1.0-alpha.3
 - Last evidence update: 2026-09-13
 - Primary owner: Umesh Kumar (Project Owner & Product Sponsor)
 
@@ -19,8 +19,8 @@
 | M3 — Foundation slice | @backend / @android | `VERIFIED` | M2 | Monorepo shell, build, lint, CI, test harnesses | `VERIFIED` (37 tests) | Pass | `VERIFIED` | Local | Complete |
 | M4 — Slice 1: Identity, Auth & Sessions | @backend / @android | `VERIFIED` | M3 | Identity, onboarding, role switch, admin MFA, RTR | `VERIFIED` (37 tests) | Pass | `VERIFIED` | Local | Approved by Umesh Kumar |
 | M4 — Slice 2: Provider Profiles & Verification | @backend / @android | `VERIFIED` | M4 (Slice 1) | Coverage radius, rate cards, verification queues | `VERIFIED` (47 tests) | Pass | `VERIFIED` | Local | Complete |
-| M5 — Discovery and requests (Slice 3) | @backend / @android | `IN_PROGRESS` | M4 | Catalogue, problem search, targeted & matching requests | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Active |
-| M6 — Quotes and booking (Slice 4) | @backend / @android | `NOT_STARTED` | M5 | Lead dispatch, quotes, comparison, atomic booking | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Non-blocking |
+| M5 — Discovery and requests (Slice 3) | @backend / @android | `VERIFIED` | M4 | Catalogue, problem search, targeted & matching requests | `VERIFIED` (55 tests) | Pass | `VERIFIED` | Local | Complete |
+| M6 — Quotes and booking (Slice 4) | @backend / @android | `IN_PROGRESS` | M5 | Lead dispatch, quotes, comparison, atomic booking | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Active |
 | M7 — Job lifecycle and payments (Slice 5) | @backend / @android | `NOT_STARTED` | M6 | En route, arrive, start, change order, completion, pay | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Non-blocking |
 | M8 — Reviews, complaints, and safety (Slice 6) | @support / @security | `NOT_STARTED` | M7 | Verified reviews, disputes, safety escalation, appeals | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Non-blocking |
 | M9 — Admin and public web (Slice 7 & 8) | @web | `NOT_STARTED` | M8 | Admin RBAC/MFA, audit logs, public website, SEO | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Non-blocking |
