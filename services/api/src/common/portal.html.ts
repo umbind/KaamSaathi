@@ -26,9 +26,6 @@ export function getInteractivePortalHtml(): string {
       --radius-lg: 20px;
       --radius-full: 9999px;
       --min-tap: 48px;
-      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.08);
-      --shadow-md: 0 6px 18px -2px rgba(15, 23, 42, 0.12);
-      --shadow-lg: 0 16px 36px -4px rgba(15, 23, 42, 0.16);
       --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
 
@@ -43,7 +40,7 @@ export function getInteractivePortalHtml(): string {
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Accessibility 48dp minimum touch targets */
+    /* Accessibility 48dp touch targets */
     button, input, select, a { min-height: var(--min-tap); font-size: 1rem; }
 
     /* Top Emergency Alert Bar */
@@ -168,7 +165,7 @@ export function getInteractivePortalHtml(): string {
       border: 1px solid #FEF3C7;
     }
 
-    /* Container */
+    /* Main Container */
     .app-container {
       max-width: 1240px;
       margin: 0 auto;
@@ -410,7 +407,7 @@ export function getInteractivePortalHtml(): string {
       font-weight: 600;
     }
 
-    /* Dense & Attractive Categories Grid */
+    /* Category Cards Grid */
     .grid-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -431,7 +428,7 @@ export function getInteractivePortalHtml(): string {
       box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
     }
 
-    /* Card 1: Electrician */
+    /* Individual Card Color Themes */
     .card-amber {
       background: linear-gradient(145deg, #FFFBEB 0%, #FEF3C7 100%);
       border: 3px solid #F59E0B;
@@ -443,7 +440,6 @@ export function getInteractivePortalHtml(): string {
     .card-amber .btn-card-action { background: #B45309; color: #FFFFFF; }
     .card-amber .btn-card-action:hover { background: #78350F; }
 
-    /* Card 2: Plumber */
     .card-blue {
       background: linear-gradient(145deg, #F0F9FF 0%, #E0F2FE 100%);
       border: 3px solid #0284C7;
@@ -455,7 +451,6 @@ export function getInteractivePortalHtml(): string {
     .card-blue .btn-card-action { background: #0369A1; color: #FFFFFF; }
     .card-blue .btn-card-action:hover { background: #0C4A6E; }
 
-    /* Card 3: Appliance */
     .card-cyan {
       background: linear-gradient(145deg, #ECFEFF 0%, #CFFAFE 100%);
       border: 3px solid #0891B2;
@@ -467,7 +462,6 @@ export function getInteractivePortalHtml(): string {
     .card-cyan .btn-card-action { background: #0891B2; color: #FFFFFF; }
     .card-cyan .btn-card-action:hover { background: #164E63; }
 
-    /* Card 4: Carpenter */
     .card-orange {
       background: linear-gradient(145deg, #FFF7ED 0%, #FFEDD5 100%);
       border: 3px solid #EA580C;
@@ -479,7 +473,6 @@ export function getInteractivePortalHtml(): string {
     .card-orange .btn-card-action { background: #C2410C; color: #FFFFFF; }
     .card-orange .btn-card-action:hover { background: #7C2D12; }
 
-    /* Card 5: Painter */
     .card-purple {
       background: linear-gradient(145deg, #FAF5FF 0%, #F3E8FF 100%);
       border: 3px solid #9333EA;
@@ -491,7 +484,6 @@ export function getInteractivePortalHtml(): string {
     .card-purple .btn-card-action { background: #7E22CE; color: #FFFFFF; }
     .card-purple .btn-card-action:hover { background: #581C87; }
 
-    /* Card 6: Cleaning */
     .card-emerald {
       background: linear-gradient(145deg, #ECFDF5 0%, #D1FAE5 100%);
       border: 3px solid #059669;
@@ -564,7 +556,7 @@ export function getInteractivePortalHtml(): string {
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(2, 6, 23, 0.75);
+      background: rgba(2, 6, 23, 0.8);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -581,7 +573,7 @@ export function getInteractivePortalHtml(): string {
       max-width: 580px;
       width: 100%;
       border: 3px solid #1E3A8A;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5);
       overflow: hidden;
       animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -609,8 +601,8 @@ export function getInteractivePortalHtml(): string {
       border: none;
       color: white;
       font-size: 1.3rem;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       min-height: auto;
       border-radius: 50%;
       cursor: pointer;
@@ -646,7 +638,7 @@ export function getInteractivePortalHtml(): string {
       color: #1E293B;
       font-size: 0.88rem;
       font-weight: 700;
-      padding: 0.4rem 0.85rem;
+      padding: 0.45rem 0.85rem;
       border-radius: var(--radius-full);
       cursor: pointer;
       min-height: auto;
@@ -666,6 +658,179 @@ export function getInteractivePortalHtml(): string {
       display: flex;
       align-items: center;
       gap: 0.85rem;
+    }
+
+    /* Directory Filter Tabs */
+    .directory-filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .dir-filter-btn {
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      color: #1E293B;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .dir-filter-btn.active, .dir-filter-btn:hover {
+      background: #1E3A8A;
+      color: white;
+      border-color: #1E3A8A;
+    }
+
+    /* Verified Providers Directory */
+    .providers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.75rem;
+    }
+    .provider-card {
+      border-radius: var(--radius-md);
+      padding: 1.85rem;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.09);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .provider-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+    }
+    .provider-card-1 {
+      background: linear-gradient(145deg, #FFFFFF 0%, #FFFBEB 100%);
+      border: 3px solid #F59E0B;
+    }
+    .provider-card-1 .provider-avatar {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      border: 3px solid #FEF3C7;
+    }
+    .provider-card-1 .provider-stats {
+      background: #FEF3C7;
+      border: 2px solid #FDE68A;
+    }
+    .provider-card-1 .stat-val { color: #78350F; }
+    .provider-card-1 .btn-provider-action {
+      background: #1E3A8A;
+      color: white;
+      border: 2px solid #3B82F6;
+    }
+    .provider-card-1 .btn-provider-action:hover { background: #172554; }
+
+    .provider-card-2 {
+      background: linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 100%);
+      border: 3px solid #0284C7;
+    }
+    .provider-card-2 .provider-avatar {
+      background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+      border: 3px solid #BAE6FD;
+    }
+    .provider-card-2 .provider-stats {
+      background: #E0F2FE;
+      border: 2px solid #BAE6FD;
+    }
+    .provider-card-2 .stat-val { color: #0369A1; }
+    .provider-card-2 .btn-provider-action {
+      background: #0284C7;
+      color: white;
+      border: 2px solid #38BDF8;
+    }
+    .provider-card-2 .btn-provider-action:hover { background: #0369A1; }
+
+    .provider-card-3 {
+      background: linear-gradient(145deg, #FFFFFF 0%, #ECFEFF 100%);
+      border: 3px solid #0891B2;
+    }
+    .provider-card-3 .provider-avatar {
+      background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%);
+      border: 3px solid #A5F3FC;
+    }
+    .provider-card-3 .provider-stats {
+      background: #CFFAFE;
+      border: 2px solid #A5F3FC;
+    }
+    .provider-card-3 .stat-val { color: #0E7490; }
+    .provider-card-3 .btn-provider-action {
+      background: #0891B2;
+      color: white;
+      border: 2px solid #22D3EE;
+    }
+    .provider-card-3 .btn-provider-action:hover { background: #0E7490; }
+
+    .provider-head {
+      display: flex;
+      gap: 1.1rem;
+      align-items: flex-start;
+      margin-bottom: 1.1rem;
+    }
+    .provider-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .provider-info h4 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #0F172A;
+    }
+    .provider-trade {
+      color: #1E3A8A;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+    .provider-location {
+      font-size: 0.88rem;
+      color: #475569;
+      font-weight: 700;
+    }
+    .badge-check {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: #065F46;
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      margin-right: 0.4rem;
+      margin-top: 0.5rem;
+      box-shadow: 0 2px 4px rgba(6, 95, 70, 0.25);
+    }
+    .provider-stats {
+      margin: 1.25rem 0;
+      padding: 0.9rem;
+      border-radius: var(--radius-sm);
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+    }
+    .stat-val { font-weight: 900; font-size: 1.1rem; }
+    .stat-lbl { font-size: 0.8rem; color: #475569; font-weight: 700; }
+    .btn-provider-action {
+      width: 100%;
+      font-weight: 900;
+      font-size: 0.98rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     /* Live Interactive Pilot Console */
@@ -847,183 +1012,6 @@ export function getInteractivePortalHtml(): string {
       word-break: break-word;
     }
 
-    /* Directory Filter Tabs */
-    .directory-filter-bar {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
-    .dir-filter-btn {
-      background: #FFFFFF;
-      border: 2px solid #CBD5E1;
-      color: #1E293B;
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 0.45rem 1rem;
-      border-radius: var(--radius-full);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .dir-filter-btn.active, .dir-filter-btn:hover {
-      background: #1E3A8A;
-      color: white;
-      border-color: #1E3A8A;
-    }
-
-    /* Dense & Attractive Verified Providers Directory */
-    .providers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 1.75rem;
-    }
-    .provider-card {
-      border-radius: var(--radius-md);
-      padding: 1.85rem;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.09);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .provider-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
-    }
-
-    /* Provider 1: Ramesh Verma (Golden Amber Theme) */
-    .provider-card-1 {
-      background: linear-gradient(145deg, #FFFFFF 0%, #FFFBEB 100%);
-      border: 3px solid #F59E0B;
-    }
-    .provider-card-1 .provider-avatar {
-      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-      border: 3px solid #FEF3C7;
-    }
-    .provider-card-1 .provider-stats {
-      background: #FEF3C7;
-      border: 2px solid #FDE68A;
-    }
-    .provider-card-1 .stat-val { color: #78350F; }
-    .provider-card-1 .btn-provider-action {
-      background: #1E3A8A;
-      color: white;
-      border: 2px solid #3B82F6;
-    }
-    .provider-card-1 .btn-provider-action:hover { background: #172554; }
-
-    /* Provider 2: Suresh Yadav (Azure Blue Theme) */
-    .provider-card-2 {
-      background: linear-gradient(145deg, #FFFFFF 0%, #F0F9FF 100%);
-      border: 3px solid #0284C7;
-    }
-    .provider-card-2 .provider-avatar {
-      background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
-      border: 3px solid #BAE6FD;
-    }
-    .provider-card-2 .provider-stats {
-      background: #E0F2FE;
-      border: 2px solid #BAE6FD;
-    }
-    .provider-card-2 .stat-val { color: #0369A1; }
-    .provider-card-2 .btn-provider-action {
-      background: #0284C7;
-      color: white;
-      border: 2px solid #38BDF8;
-    }
-    .provider-card-2 .btn-provider-action:hover { background: #0369A1; }
-
-    /* Provider 3: Mohd. Imran (Cyan/Teal Theme) */
-    .provider-card-3 {
-      background: linear-gradient(145deg, #FFFFFF 0%, #ECFEFF 100%);
-      border: 3px solid #0891B2;
-    }
-    .provider-card-3 .provider-avatar {
-      background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%);
-      border: 3px solid #A5F3FC;
-    }
-    .provider-card-3 .provider-stats {
-      background: #CFFAFE;
-      border: 2px solid #A5F3FC;
-    }
-    .provider-card-3 .stat-val { color: #0E7490; }
-    .provider-card-3 .btn-provider-action {
-      background: #0891B2;
-      color: white;
-      border: 2px solid #22D3EE;
-    }
-    .provider-card-3 .btn-provider-action:hover { background: #0E7490; }
-
-    .provider-head {
-      display: flex;
-      gap: 1.1rem;
-      align-items: flex-start;
-      margin-bottom: 1.1rem;
-    }
-    .provider-avatar {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    .provider-info h4 {
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: #0F172A;
-    }
-    .provider-trade {
-      color: #1E3A8A;
-      font-size: 0.95rem;
-      font-weight: 800;
-      margin-bottom: 0.25rem;
-    }
-    .provider-location {
-      font-size: 0.88rem;
-      color: #475569;
-      font-weight: 700;
-    }
-    .badge-check {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      background: #065F46;
-      color: #FFFFFF;
-      font-size: 0.8rem;
-      font-weight: 800;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      margin-right: 0.4rem;
-      margin-top: 0.5rem;
-      box-shadow: 0 2px 4px rgba(6, 95, 70, 0.25);
-    }
-    .provider-stats {
-      margin: 1.25rem 0;
-      padding: 0.9rem;
-      border-radius: var(--radius-sm);
-      display: flex;
-      justify-content: space-around;
-      text-align: center;
-    }
-    .stat-val { font-weight: 900; font-size: 1.1rem; }
-    .stat-lbl { font-size: 0.8rem; color: #475569; font-weight: 700; }
-    .btn-provider-action {
-      width: 100%;
-      font-weight: 900;
-      font-size: 0.98rem;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
     /* 360-Degree Legal Shield Section */
     .legal-shield-box {
       background: #FFFFFF;
@@ -1049,8 +1037,6 @@ export function getInteractivePortalHtml(): string {
       transform: translateY(-4px);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
-
-    /* Pillar 1 */
     .legal-card-1 {
       background: linear-gradient(145deg, #FEF3C7 0%, #FDE68A 100%);
       border: 3px solid #F59E0B;
@@ -1058,7 +1044,6 @@ export function getInteractivePortalHtml(): string {
     .legal-card-1 .legal-pill-title { color: #78350F; }
     .legal-card-1 .legal-pill-desc { color: #451A03; }
 
-    /* Pillar 2 */
     .legal-card-2 {
       background: linear-gradient(145deg, #DBEAFE 0%, #BFDBFE 100%);
       border: 3px solid #2563EB;
@@ -1066,7 +1051,6 @@ export function getInteractivePortalHtml(): string {
     .legal-card-2 .legal-pill-title { color: #1E3A8A; }
     .legal-card-2 .legal-pill-desc { color: #172554; }
 
-    /* Pillar 3 */
     .legal-card-3 {
       background: linear-gradient(145deg, #FEE2E2 0%, #FECACA 100%);
       border: 3px solid #DC2626;
@@ -1074,7 +1058,6 @@ export function getInteractivePortalHtml(): string {
     .legal-card-3 .legal-pill-title { color: #991B1B; }
     .legal-card-3 .legal-pill-desc { color: #450A0A; }
 
-    /* Pillar 4 */
     .legal-card-4 {
       background: linear-gradient(145deg, #F3E8FF 0%, #E9D5FF 100%);
       border: 3px solid #9333EA;
@@ -1082,7 +1065,6 @@ export function getInteractivePortalHtml(): string {
     .legal-card-4 .legal-pill-title { color: #6B21A8; }
     .legal-card-4 .legal-pill-desc { color: #3B0764; }
 
-    /* Pillar 5 */
     .legal-card-5 {
       background: linear-gradient(145deg, #D1FAE5 0%, #A7F3D0 100%);
       border: 3px solid #059669;
@@ -1233,7 +1215,7 @@ export function getInteractivePortalHtml(): string {
       <div id="searchResultBox" class="search-results-panel"></div>
     </section>
 
-    <!-- Services Grid (Dense & Attractive Colors + Interactive Modals) -->
+    <!-- Services Grid -->
     <div id="services" class="section-header">
       <div>
         <h2 class="section-title">✨ लोकप्रिय सेवा श्रेणियां (Service Categories)</h2>
@@ -1369,9 +1351,9 @@ export function getInteractivePortalHtml(): string {
             <input type="text" id="modalAddress" class="search-input" style="padding-left:1rem;" placeholder="मोहल्ला (उदा: गोमती नगर, विभूति खंड)" value="गोमती नगर, विभूति खंड">
           </div>
 
-          <!-- Step 3: Available Provider Preview -->
+          <!-- Step 3: Matched Provider Preview -->
           <div class="modal-step-title">3. इस अनुरोध को प्राप्त करने वाले नजदीकी कामसाथी:</div>
-          <div id="modalProviderPreview" class="matched-provider-preview">
+          <div class="matched-provider-preview">
             <div style="font-size:2rem;">👨‍🔧</div>
             <div style="flex:1;">
               <div id="modalProviderName" style="font-weight:900; color:#0F172A;">रमेश चंद्र वर्मा (Verma Electricals)</div>
@@ -1398,7 +1380,7 @@ export function getInteractivePortalHtml(): string {
       </div>
     </div>
 
-    <!-- Verified Providers Directory (Dense & Rich Colors) -->
+    <!-- Verified Providers Directory -->
     <div id="providers" class="section-header">
       <div>
         <h2 class="section-title">👨‍🔧 सत्यापित कामसाथी डायरेक्टरी (Verified Providers)</h2>
@@ -1647,7 +1629,7 @@ export function getInteractivePortalHtml(): string {
       </div>
     </div>
 
-    <!-- 360-Degree Legal & Regulatory Shield (Dense & Striking Color Palettes) -->
+    <!-- 360-Degree Legal & Regulatory Shield -->
     <div id="legal" class="legal-shield-box">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         <div>
@@ -1658,7 +1640,6 @@ export function getInteractivePortalHtml(): string {
       </div>
 
       <div class="legal-pills-grid">
-        <!-- Pillar 1 -->
         <div class="legal-pill-card legal-card-1">
           <div class="legal-pill-icon">⚖️</div>
           <div class="legal-pill-title">1. उपभोक्ता संरक्षण एवं Safe Harbor</div>
@@ -1667,7 +1648,6 @@ export function getInteractivePortalHtml(): string {
           </div>
         </div>
 
-        <!-- Pillar 2 -->
         <div class="legal-pill-card legal-card-2">
           <div class="legal-pill-icon">💼</div>
           <div class="legal-pill-title">2. श्रम कानून एवं गिग वर्कर सुरक्षा</div>
@@ -1676,7 +1656,6 @@ export function getInteractivePortalHtml(): string {
           </div>
         </div>
 
-        <!-- Pillar 3 -->
         <div class="legal-pill-card legal-card-3">
           <div class="legal-pill-icon">👮</div>
           <div class="legal-pill-title">3. आपराधिक व पुलिस सहयोग (CrPC 91)</div>
@@ -1685,7 +1664,6 @@ export function getInteractivePortalHtml(): string {
           </div>
         </div>
 
-        <!-- Pillar 4 -->
         <div class="legal-pill-card legal-card-4">
           <div class="legal-pill-icon">🔒</div>
           <div class="legal-pill-title">4. डेटा गोपनीयता (DPDP Act 2023)</div>
@@ -1694,7 +1672,6 @@ export function getInteractivePortalHtml(): string {
           </div>
         </div>
 
-        <!-- Pillar 5 -->
         <div class="legal-pill-card legal-card-5">
           <div class="legal-pill-icon">💰</div>
           <div class="legal-pill-title">5. कर व वित्तीय सुरक्षा (Direct UPI/Cash)</div>
@@ -1747,64 +1724,72 @@ export function getInteractivePortalHtml(): string {
 
     function setTerminalOutput(title, status, data, latencyMs) {
       const badge = document.getElementById('terminalStatusBadge');
-      badge.innerText = status ? 'HTTP ' + status + ' (' + latencyMs + 'ms)' : 'BUSY';
-      badge.style.color = (status >= 200 && status < 300) ? '#22C55E' : '#EF4444';
+      if (badge) {
+        badge.innerText = status ? 'HTTP ' + status + ' (' + latencyMs + 'ms)' : 'BUSY';
+        badge.style.color = (status >= 200 && status < 300) ? '#22C55E' : '#EF4444';
+      }
 
       const terminal = document.getElementById('terminalOutput');
-      terminal.innerText = '>>> ' + title + '\\n' +
-                           (status ? '>>> STATUS: ' + status + ' | LATENCY: ' + latencyMs + 'ms\\n\\n' : '') +
-                           (typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+      if (terminal) {
+        terminal.innerText = '>>> ' + title + '\\n' +
+                             (status ? '>>> STATUS: ' + status + ' | LATENCY: ' + latencyMs + 'ms\\n\\n' : '') +
+                             (typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+      }
     }
 
     // Modal Functions
     function openBookingModal(catId, catName, icon, visitPaise, problemTags) {
       activeModalCategoryId = catId;
+      const modal = document.getElementById('bookingModal');
+      if (!modal) return;
+
       document.getElementById('modalTitle').innerHTML = icon + ' ' + catName + ' खोजें व संपर्क करें';
       document.getElementById('modalCategoryBadge').innerText = catName;
       document.getElementById('modalVisitFee').innerText = '₹' + visitPaise;
       document.getElementById('modalSuccessBox').style.display = 'none';
       document.getElementById('btnModalSubmit').style.display = 'flex';
 
-      // Set matched provider name
       const provNameEl = document.getElementById('modalProviderName');
-      if (catId === 'cat_electrician') {
-        provNameEl.innerHTML = 'रमेश चंद्र वर्मा (Verma Electricals) • ★ 4.8';
-      } else if (catId === 'cat_plumber') {
-        provNameEl.innerHTML = 'सुरेश कुमार यादव (Yadav Sanitation) • ★ 4.7';
-      } else {
-        provNameEl.innerHTML = 'मोहम्मद इमरान (Imran Cool Care) • ★ 4.9';
+      if (provNameEl) {
+        if (catId === 'cat_electrician') {
+          provNameEl.innerHTML = 'रमेश चंद्र वर्मा (Verma Electricals) • ★ 4.8';
+        } else if (catId === 'cat_plumber') {
+          provNameEl.innerHTML = 'सुरेश कुमार यादव (Yadav Sanitation) • ★ 4.7';
+        } else {
+          provNameEl.innerHTML = 'मोहम्मद इमरान (Imran Cool Care) • ★ 4.9';
+        }
       }
 
-      // Populate problem tags
       const tagsContainer = document.getElementById('modalProblemTags');
-      tagsContainer.innerHTML = '';
-      problemTags.forEach((tag, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'problem-tag-pill' + (idx === 0 ? ' selected' : '');
-        btn.innerText = tag;
-        btn.onclick = function() {
-          btn.classList.toggle('selected');
-        };
-        tagsContainer.appendChild(btn);
-      });
+      if (tagsContainer) {
+        tagsContainer.innerHTML = '';
+        problemTags.forEach((tag, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'problem-tag-pill' + (idx === 0 ? ' selected' : '');
+          btn.innerText = tag;
+          btn.onclick = function() {
+            btn.classList.toggle('selected');
+          };
+          tagsContainer.appendChild(btn);
+        });
+      }
 
-      // Filter providers directory below
       filterProviders(catId);
-
-      // Show modal
-      document.getElementById('bookingModal').classList.add('active');
+      modal.classList.add('active');
     }
 
     function closeBookingModal() {
-      document.getElementById('bookingModal').classList.remove('active');
+      const modal = document.getElementById('bookingModal');
+      if (modal) modal.classList.remove('active');
     }
 
     function scrollToProviders() {
-      document.getElementById('providers').scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById('providers');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
 
     function filterProviders(catId) {
-      // Update filter tabs
       const filterBtns = document.querySelectorAll('.dir-filter-btn');
       filterBtns.forEach(btn => btn.classList.remove('active'));
 
@@ -1827,7 +1812,6 @@ export function getInteractivePortalHtml(): string {
       const district = document.getElementById('modalDistrictSelect').value;
       const address = document.getElementById('modalAddress').value || 'गोमती नगर, विभूति खंड, लखनऊ';
 
-      // If user is not yet logged in, auto-login customer first for seamless UX
       if (!currentCustomerToken) {
         try {
           const authRes = await fetch('/api/v1/auth/otp/verify', {
@@ -1850,7 +1834,7 @@ export function getInteractivePortalHtml(): string {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + currentCustomerToken
+            'Authorization': 'Bearer ' + (currentCustomerToken || '')
           },
           body: JSON.stringify({
             category_id: activeModalCategoryId || 'cat_electrician',
@@ -1866,7 +1850,6 @@ export function getInteractivePortalHtml(): string {
 
         setTerminalOutput('POST /api/v1/requests (Modal Service Booking)', res.status, data, latency);
 
-        // Show success state in modal
         document.getElementById('btnModalSubmit').style.display = 'none';
         document.getElementById('modalSuccessBox').style.display = 'block';
       } catch (err) {
@@ -1947,7 +1930,7 @@ export function getInteractivePortalHtml(): string {
           html += '</div>';
           resBox.innerHTML = html;
         } else {
-          resBox.innerHTML = '<span style="color:#FCA5A5; font-weight:700;">⚠️ कोई परिणाम नहीं मिला। कृपया \'bijli\', \'nal\', \'ac\', \'fan\' आदि खोजें।</span>';
+          resBox.innerHTML = '<span style="color:#FCA5A5; font-weight:700;">⚠️ कोई परिणाम नहीं मिला। कृपया bijli, nal, ac, fan आदि खोजें।</span>';
         }
       } catch (err) {
         resBox.innerHTML = '<span style="color:#FCA5A5; font-weight:700;">त्रुटि: ' + err.message + '</span>';

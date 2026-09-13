@@ -114,6 +114,9 @@ export class App {
       // 0. Interactive Web Portal & Health check probe
       if (method === 'GET' && (pathname === '/' || pathname === '/index.html')) {
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
         res.statusCode = 200;
         res.end(getInteractivePortalHtml());
         return;
