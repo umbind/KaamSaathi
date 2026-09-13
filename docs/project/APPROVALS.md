@@ -1,10 +1,11 @@
-﻿# KaamSaathi Approvals Register
+# KaamSaathi Approvals Register
 
 ## Named Project Owner (Section 8 Gatekeeper)
 
 - **Designated Human Owner:** Umesh Kumar
 - **Designated Role / Title:** Project Owner & Product Sponsor
 - **Contact Channel / Method:** Antigravity Direct Pair Programming Session
+- **Official GitHub Repository:** https://github.com/umbind/KaamSaathi
 - **Expected Response Window:** 24–48 hours
 
 *Confirmed and designated on 2026-09-13.*
