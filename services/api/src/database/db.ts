@@ -119,7 +119,7 @@ export interface RequestRecord {
   category_id: string;
   request_type: 'TARGETED' | 'BROADCAST';
   target_provider_id?: string;
-  status: 'DRAFT' | 'SUBMITTED' | 'MATCHING' | 'LEAD_DISPATCHED' | 'QUOTES_RECEIVED' | 'CANCELLED';
+  status: 'DRAFT' | 'SUBMITTED' | 'MATCHING' | 'LEAD_DISPATCHED' | 'QUOTED' | 'QUOTES_RECEIVED' | 'BOOKED' | 'CANCELLED';
   district_id: string;
   locality_name: string;
   pin_code: string;
@@ -141,6 +141,41 @@ export interface LeadRecord {
   status: 'DISPATCHED' | 'VIEWED' | 'DECLINED' | 'QUOTED' | 'EXPIRED';
   decline_reason?: string;
   expires_at: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface QuoteRecord {
+  id: string;
+  request_id: string;
+  lead_id: string;
+  provider_id: string;
+  status: 'DRAFT' | 'DISPATCHED' | 'VIEWED' | 'ACCEPTED' | 'SUPERSEDED' | 'EXPIRED' | 'WITHDRAWN';
+  visitation_fee_paise: number;
+  estimated_labor_paise: number;
+  estimated_parts_paise: number;
+  total_estimate_paise: number;
+  scope_notes: string;
+  expires_at: Date;
+  version: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface BookingRecord {
+  id: string;
+  request_id: string;
+  quote_id: string;
+  customer_id: string;
+  provider_id: string;
+  status: 'SCHEDULED' | 'EN_ROUTE' | 'ARRIVED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  agreed_visitation_fee_paise: number;
+  agreed_labor_estimate_paise: number;
+  agreed_parts_estimate_paise: number;
+  total_agreed_estimate_paise: number;
+  scheduled_window: string;
+  consent_contact_reveal: boolean;
+  version: number;
   created_at: Date;
   updated_at: Date;
 }
@@ -172,6 +207,8 @@ export class InMemoryDatabase {
   private verificationSubmissions = new Map<string, VerificationSubmissionRecord>();
   private requests = new Map<string, RequestRecord>();
   private leads = new Map<string, LeadRecord>();
+  private quotes = new Map<string, QuoteRecord>();
+  private bookings = new Map<string, BookingRecord>();
   private idempotency = new Map<string, IdempotencyRecord>();
   private auditLogs: AuditLogRecord[] = [];
   private auditIdSequence = 1;
@@ -191,6 +228,8 @@ export class InMemoryDatabase {
     this.verificationSubmissions.clear();
     this.requests.clear();
     this.leads.clear();
+    this.quotes.clear();
+    this.bookings.clear();
     this.idempotency.clear();
     this.auditLogs = [];
     this.auditIdSequence = 1;
@@ -305,6 +344,10 @@ export class InMemoryDatabase {
     return profile;
   }
 
+  findCustomerProfileById(id: string): CustomerProfileRecord | undefined {
+    return this.customerProfiles.get(id);
+  }
+
   // Provider Profiles
   findProviderProfileByUserId(userId: string): ProviderProfileRecord | undefined {
     for (const pp of this.providerProfiles.values()) {
@@ -408,6 +451,46 @@ export class InMemoryDatabase {
 
   getAllProviderProfiles(): ProviderProfileRecord[] {
     return Array.from(this.providerProfiles.values());
+  }
+
+  // Quotes
+  saveQuote(quote: QuoteRecord): QuoteRecord {
+    this.quotes.set(quote.id, { ...quote, updated_at: new Date() });
+    return quote;
+  }
+
+  findQuoteById(id: string): QuoteRecord | undefined {
+    return this.quotes.get(id);
+  }
+
+  findQuotesByRequestId(requestId: string): QuoteRecord[] {
+    return Array.from(this.quotes.values()).filter(q => q.request_id === requestId);
+  }
+
+  findQuotesByProviderId(providerId: string): QuoteRecord[] {
+    return Array.from(this.quotes.values()).filter(q => q.provider_id === providerId);
+  }
+
+  // Bookings
+  saveBooking(booking: BookingRecord): BookingRecord {
+    this.bookings.set(booking.id, { ...booking, updated_at: new Date() });
+    return booking;
+  }
+
+  findBookingById(id: string): BookingRecord | undefined {
+    return this.bookings.get(id);
+  }
+
+  findBookingByRequestId(requestId: string): BookingRecord | undefined {
+    return Array.from(this.bookings.values()).find(b => b.request_id === requestId);
+  }
+
+  findBookingsByCustomerId(customerId: string): BookingRecord[] {
+    return Array.from(this.bookings.values()).filter(b => b.customer_id === customerId);
+  }
+
+  findBookingsByProviderId(providerId: string): BookingRecord[] {
+    return Array.from(this.bookings.values()).filter(b => b.provider_id === providerId);
   }
 
   // Idempotency

@@ -10,6 +10,7 @@ import { CustomerService } from './modules/customer/customer.service.js';
 import { ProviderService } from './modules/provider/provider.service.js';
 import { AdminVerificationService } from './modules/admin/admin-verification.service.js';
 import { RequestService } from './modules/request/request.service.js';
+import { BookingService } from './modules/booking/booking.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
@@ -17,6 +18,7 @@ export class App {
   public readonly providerService = new ProviderService();
   public readonly adminVerificationService = new AdminVerificationService();
   public readonly requestService = new RequestService();
+  public readonly bookingService = new BookingService();
 
   async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const correlationId = (req.headers['x-correlation-id'] as string) || crypto.randomUUID();
@@ -214,6 +216,31 @@ export class App {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
         if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
         responseBody = await this.requestService.getProviderLeads(authUser.sub);
+      }
+      
+      // 6. Quotes and Bookings (Slice 4)
+      else if (method === 'POST' && pathname === '/api/v1/provider/quotes') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        if (authUser.role !== 'PROVIDER') throw new AppError(403, StandardErrorCode.FORBIDDEN, 'errors.provider_role_required');
+        responseBody = await this.bookingService.createQuote(authUser.sub, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'GET' && pathname.startsWith('/api/v1/requests/') && pathname.endsWith('/quotes')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        // ['', 'api', 'v1', 'requests', ':id', 'quotes']
+        const requestId = parts[4];
+        if (!requestId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_request_id');
+        responseBody = await this.bookingService.getRequestQuotes(authUser.sub, requestId);
+      } else if (method === 'POST' && pathname === '/api/v1/quotes/accept') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.bookingService.acceptQuote(authUser.sub, body, correlationId, clientIp);
+        statusCode = 200;
+      } else if (method === 'GET' && pathname.startsWith('/api/v1/bookings/')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.bookingService.getBookingDetails(authUser.sub, bookingId);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

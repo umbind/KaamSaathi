@@ -18,7 +18,7 @@ export interface ServiceRequestDto {
   category_id: string;
   request_type: 'TARGETED' | 'BROADCAST';
   target_provider_id?: string;
-  status: 'DRAFT' | 'SUBMITTED' | 'MATCHING' | 'LEAD_DISPATCHED' | 'QUOTES_RECEIVED' | 'CANCELLED';
+  status: 'DRAFT' | 'SUBMITTED' | 'MATCHING' | 'LEAD_DISPATCHED' | 'QUOTED' | 'QUOTES_RECEIVED' | 'BOOKED' | 'CANCELLED';
   district_id: string;
   locality_name: string;
   pin_code: string;
