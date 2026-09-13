@@ -110,6 +110,20 @@ export class App {
       let responseBody: any = null;
       let statusCode = 200;
 
+      // 0. Health check probe
+      if (method === 'GET' && pathname === '/health') {
+        responseBody = {
+          status: 'healthy',
+          service: 'KaamSaathi API',
+          version: '1.0.0-rc.1',
+          uptime: process.uptime(),
+          timestamp: new Date().toISOString()
+        };
+        res.statusCode = 200;
+        res.end(JSON.stringify(responseBody));
+        return;
+      }
+
       // 1. Auth routes
       if (method === 'POST' && pathname === '/api/v1/auth/otp/request') {
         responseBody = await this.identityService.requestOtp(body, correlationId, clientIp);
