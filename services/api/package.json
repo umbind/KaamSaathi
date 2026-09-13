@@ -1,0 +1,21 @@
+{
+  "name": "@kaamsaathi/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/main.js",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/main.js",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@kaamsaathi/contracts": "workspace:*",
+    "@kaamsaathi/localization": "workspace:*",
+    "@kaamsaathi/design-tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "typescript": "^5.6.3"
+  }
+}

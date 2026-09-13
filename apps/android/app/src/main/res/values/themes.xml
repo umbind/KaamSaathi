@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.KaamSaathi" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#15803D</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

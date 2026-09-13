@@ -1,0 +1,501 @@
+openapi: 3.1.0
+info:
+  title: KaamSaathi Hyperlocal Marketplace API
+  description: Authoritative REST API for KaamSaathi (Uttar Pradesh Pilot), covering Customer, Provider, and Admin operations.
+  version: 1.0.0-frozen
+servers:
+  - url: /api/v1
+    description: Production & Staging Versioned Base Path
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    AdminMfaAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Requires completed TOTP MFA claims
+
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: UUIDv4 ensuring safe transaction replay on unstable networks.
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+      description: Tracing correlation ID.
+    AcceptLanguage:
+      name: Accept-Language
+      in: header
+      required: false
+      schema:
+        type: string
+        enum: [hi, en]
+        default: hi
+      description: Preferred response localization.
+
+  schemas:
+    ErrorEnvelope:
+      type: object
+      required:
+        - code
+        - message_key
+        - correlation_id
+      properties:
+        code:
+          type: string
+          example: INVALID_STATE_TRANSITION
+        message_key:
+          type: string
+          example: errors.booking.invalid_transition
+        correlation_id:
+          type: string
+          example: req_01J7K8M9N2
+        details:
+          type: object
+          additionalProperties: true
+
+    OtpRequestPayload:
+      type: object
+      required:
+        - phone_number
+      properties:
+        phone_number:
+          type: string
+          pattern: '^\+91[6-9][0-9]{9}$'
+          example: '+919876543210'
+
+    OtpRequestResponse:
+      type: object
+      required:
+        - status
+        - cooldown_seconds
+        - message_key
+      properties:
+        status:
+          type: string
+          example: CHALLENGE_ISSUED
+        cooldown_seconds:
+          type: integer
+          example: 60
+        message_key:
+          type: string
+          example: auth.otp.challenge_issued
+
+    OtpVerifyPayload:
+      type: object
+      required:
+        - phone_number
+        - otp_code
+      properties:
+        phone_number:
+          type: string
+          pattern: '^\+91[6-9][0-9]{9}$'
+          example: '+919876543210'
+        otp_code:
+          type: string
+          pattern: '^[0-9]{6}$'
+          example: '123456'
+
+    AuthSessionResponse:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - expires_in
+        - user
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+          example: 900
+        is_new_user:
+          type: boolean
+        user:
+          $ref: '#/components/schemas/UserDto'
+
+    UserDto:
+      type: object
+      required:
+        - id
+        - status
+        - roles
+        - active_role
+        - preferred_language
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          example: ACTIVE
+        roles:
+          type: array
+          items:
+            type: string
+            enum: [CUSTOMER, PROVIDER, ADMIN]
+        active_role:
+          type: string
+          enum: [CUSTOMER, PROVIDER]
+        preferred_language:
+          type: string
+          enum: [hi, en]
+
+    RoleSwitchPayload:
+      type: object
+      required:
+        - target_role
+      properties:
+        target_role:
+          type: string
+          enum: [CUSTOMER, PROVIDER]
+
+    CustomerProfileDto:
+      type: object
+      required:
+        - id
+        - full_name
+        - district_id
+        - locality_name
+        - pin_code
+      properties:
+        id:
+          type: string
+          format: uuid
+        full_name:
+          type: string
+          example: 'Ramesh Sharma'
+        district_id:
+          type: string
+          example: 'UP_LUCKNOW'
+        locality_name:
+          type: string
+          example: 'Aliganj'
+        pin_code:
+          type: string
+          pattern: '^[1-9][0-9]{5}$'
+          example: '226024'
+        masked_notifications:
+          type: boolean
+          default: true
+
+    CategoryDto:
+      type: object
+      required:
+        - id
+        - name_en
+        - name_hi
+        - icon_name
+        - is_active
+      properties:
+        id:
+          type: string
+          example: electrician
+        name_en:
+          type: string
+          example: Electrician
+        name_hi:
+          type: string
+          example: 'बिजली मिस्त्री'
+        icon_name:
+          type: string
+          example: bolt
+        is_active:
+          type: boolean
+
+    ServiceRequestCreatePayload:
+      type: object
+      required:
+        - category_id
+        - request_type
+        - district_id
+        - locality_name
+        - pin_code
+        - description
+      properties:
+        category_id:
+          type: string
+          example: electrician
+        request_type:
+          type: string
+          enum: [TARGETED, BROADCAST]
+        target_provider_id:
+          type: string
+          format: uuid
+        district_id:
+          type: string
+          example: UP_LUCKNOW
+        locality_name:
+          type: string
+          example: Aliganj
+        pin_code:
+          type: string
+          pattern: '^[1-9][0-9]{5}$'
+          example: '226024'
+        description:
+          type: string
+          example: 'Ceiling fan makes humming sound and does not spin'
+        preferred_schedule_window:
+          type: string
+          example: 'TODAY_AFTERNOON'
+
+    QuoteDto:
+      type: object
+      required:
+        - id
+        - request_id
+        - provider_id
+        - status
+        - total_amount_paise
+        - visitation_fee_paise
+        - expires_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        request_id:
+          type: string
+          format: uuid
+        provider_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [DRAFT, DISPATCHED, VIEWED, ACCEPTED, DECLINED, EXPIRED]
+        total_amount_paise:
+          type: integer
+          example: 45000
+        visitation_fee_paise:
+          type: integer
+          example: 15000
+        itemized_charges:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+              amount_paise:
+                type: integer
+        expires_at:
+          type: string
+          format: date-time
+
+    BookingDto:
+      type: object
+      required:
+        - id
+        - booking_number
+        - request_id
+        - quote_id
+        - customer_id
+        - provider_id
+        - status
+        - agreed_quote_total_paise
+        - final_payable_paise
+      properties:
+        id:
+          type: string
+          format: uuid
+        booking_number:
+          type: string
+          example: KS-UP-26-000123
+        request_id:
+          type: string
+          format: uuid
+        quote_id:
+          type: string
+          format: uuid
+        customer_id:
+          type: string
+          format: uuid
+        provider_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [CONFIRMED, EN_ROUTE, ARRIVED, IN_PROGRESS, COMPLETED, CANCELLED, DISPUTED]
+        service_address_full:
+          type: string
+        agreed_quote_total_paise:
+          type: integer
+          example: 45000
+        final_payable_paise:
+          type: integer
+          example: 45000
+
+paths:
+  /auth/otp/request:
+    post:
+      summary: Request Mobile Phone OTP Challenge
+      description: Dispatches OTP via IOtpProvider with constant-time anti-enumeration envelope.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpRequestPayload'
+      responses:
+        '200':
+          description: Constant response envelope issued regardless of registration status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OtpRequestResponse'
+        '429':
+          description: Rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /auth/otp/verify:
+    post:
+      summary: Verify OTP and Establish Session
+      description: Verifies 6-digit OTP, creates account if new, and issues JWT access and refresh tokens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OtpVerifyPayload'
+      responses:
+        '200':
+          description: Successfully authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSessionResponse'
+        '401':
+          description: Invalid or expired OTP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /auth/role-switch:
+    post:
+      summary: Switch Active Mode between Customer and Provider
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleSwitchPayload'
+      responses:
+        '200':
+          description: Role switched; updated JWT token issued.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSessionResponse'
+        '403':
+          description: Target role profile not activated.
+
+  /categories:
+    get:
+      summary: List Supported Service Categories
+      responses:
+        '200':
+          description: Active marketplace categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryDto'
+
+  /requests:
+    post:
+      summary: Create Service Request (Targeted or Broadcast)
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceRequestCreatePayload'
+      responses:
+        '201':
+          description: Request created and entered MATCHING or SUBMITTED state.
+
+  /quotes/{id}/accept:
+    post:
+      summary: Atomically Accept Quote and Create Booking
+      description: Acquires row lock, accepts quote, declines competing quotes, and creates booking record.
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Quote accepted and booking confirmed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDto'
+        '409':
+          description: Quote already accepted, expired, or self-dealing violation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorEnvelope'
+
+  /bookings/{id}/arrive:
+    post:
+      summary: Provider Status Update - Arrived on Site
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Booking status transitioned to ARRIVED.
+
+  /bookings/{id}/complete:
+    post:
+      summary: Provider or Customer Job Completion Confirmation
+      security:
+        - BearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Booking status transitioned to COMPLETED.

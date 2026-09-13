@@ -1,0 +1,19 @@
+{
+  "name": "@kaamsaathi/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --test dist/**/*.test.js"
+  },
+  "dependencies": {
+    "@kaamsaathi/contracts": "workspace:*",
+    "@kaamsaathi/localization": "workspace:*",
+    "@kaamsaathi/design-tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.1",
+    "typescript": "^5.6.3"
+  }
+}

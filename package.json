@@ -1,0 +1,14 @@
+{
+  "name": "kaamsaathi-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "KaamSaathi Hyperlocal Marketplace - Production Monorepo",
+  "scripts": {
+    "build": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" build",
+    "test": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" test",
+    "lint": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

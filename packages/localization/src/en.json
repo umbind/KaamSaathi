@@ -1,0 +1,69 @@
+{
+  "app": {
+    "name": "KaamSaathi",
+    "tagline": "Trusted Local Services at Your Doorstep"
+  },
+  "common": {
+    "continue": "Continue",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "back": "Back",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "retry": "Retry",
+    "loading": "Loading...",
+    "language": "Language",
+    "hindi": "Hindi",
+    "english": "English"
+  },
+  "auth": {
+    "phone_label": "Mobile Number",
+    "phone_placeholder": "10-digit mobile number",
+    "send_otp": "Get OTP",
+    "otp_label": "Enter OTP",
+    "otp_sent_to": "OTP sent to",
+    "resend_otp": "Resend OTP",
+    "resend_in": "Resend in {seconds}s",
+    "verify_and_login": "Verify & Continue",
+    "logout": "Log Out",
+    "role_customer": "Customer Mode",
+    "role_provider": "Provider Mode",
+    "switch_role": "Switch Role"
+  },
+  "customer": {
+    "welcome": "Welcome to KaamSaathi",
+    "profile_title": "My Profile",
+    "full_name": "Full Name",
+    "district": "District",
+    "locality": "Locality / Area",
+    "pincode": "PIN Code",
+    "address_line": "House/Street Address",
+    "masked_notifications": "Hide private details on lock screen notifications",
+    "save_profile": "Save Profile"
+  },
+  "provider": {
+    "onboard_title": "Join as KaamSaathi Professional",
+    "business_name": "Business / Name",
+    "trade_title": "Trade / Profession (e.g. Electrician, Plumber)",
+    "experience": "Years of Experience",
+    "bio": "About Your Work",
+    "availability_status": "Current Availability",
+    "available": "Available for Work",
+    "busy": "Currently Busy",
+    "offline": "Offline"
+  },
+  "categories": {
+    "electrician": "Electrician",
+    "plumber": "Plumber",
+    "appliance_repair": "Appliance Repair"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "invalid_phone": "Please enter a valid 10-digit Indian mobile number.",
+    "invalid_otp": "Invalid OTP. Please check and re-enter.",
+    "otp_expired": "OTP has expired. Please request a new one.",
+    "rate_limited": "Too many attempts. Please wait a moment and try again.",
+    "network_error": "Network error. Please check your connection and retry."
+  }
+}

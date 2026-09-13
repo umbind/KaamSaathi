@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">कामसाथी</string>
+    <string name="tagline">उत्तर प्रदेश भर में विश्वसनीय स्थानीय सेवाएँ</string>
+
+    <!-- Language Selection SCR-C-LANG -->
+    <string name="select_language_title">अपनी भाषा चुनें / Choose Your Language</string>
+    <string name="select_language_subtitle">आप इसे सेटिंग में कभी भी बदल सकते हैं</string>
+    <string name="lang_hindi">हिंदी (Hindi)</string>
+    <string name="lang_english">English</string>
+    <string name="btn_continue">आगे बढ़ें</string>
+
+    <!-- Auth SCR-AUTH-PHONE & SCR-AUTH-OTP -->
+    <string name="login_title">मोबाइल नंबर दर्ज करें</string>
+    <string name="login_subtitle">हम 6 अंकों का सत्यापन कोड भेजेंगे</string>
+    <string name="phone_label">मोबाइल नंबर</string>
+    <string name="phone_prefix">+91</string>
+    <string name="phone_hint">98765 43210</string>
+    <string name="btn_get_otp">सत्यापन कोड प्राप्त करें</string>
+    <string name="otp_title">ओटीपी सत्यापित करें</string>
+    <string name="otp_subtitle">%1$s पर भेजा गया 6-अंकों का कोड दर्ज करें</string>
+    <string name="otp_resend">कोड दोबारा भेजें</string>
+    <string name="otp_cooldown">%1$d सेकंड में दोबारा भेजें</string>
+    <string name="btn_verify">सत्यापित करें और आगे बढ़ें</string>
+    <string name="otp_invalid_code">अमान्य कोड। %1$d प्रयास शेष हैं।</string>
+    <string name="otp_cooldown_active">कृपया नया कोड अनुरोध करने से पहले प्रतीक्षा करें।</string>
+
+    <!-- Profile SCR-C-PROFILE -->
+    <string name="profile_title">अपनी प्रोफ़ाइल पूरी करें</string>
+    <string name="name_label">पूरा नाम</string>
+    <string name="district_label">उत्तर प्रदेश का ज़िला चुनें</string>
+    <string name="locality_label">इलाका / मोहल्ला / वार्ड</string>
+    <string name="pincode_label">पिन कोड (उदा. 226001)</string>
+    <string name="privacy_note">आपका पता और फ़ोन नंबर केवल आपकी स्पष्ट सहमति के बाद ही साझा किया जाता है।</string>
+    <string name="btn_save_profile">प्रोफ़ाइल सहेजें</string>
+
+    <!-- Provider Onboarding SCR-P-ONBOARD -->
+    <string name="provider_onboard_title">कारीगर / मिस्त्री के रूप में पंजीकरण करें</string>
+    <string name="provider_trade_label">मुख्य काम चुनें</string>
+    <string name="trade_electrician">बिजली मिस्त्री (Electrician)</string>
+    <string name="trade_plumber">नल मिस्त्री (Plumber)</string>
+    <string name="trade_appliance">उपकरण मरम्मत (Appliance Repair)</string>
+    <string name="experience_label">अनुभव के वर्ष</string>
+    <string name="service_radius_label">सेवा दायरा (किमी)</string>
+    <string name="btn_submit_provider">समीक्षा के लिए भेजें</string>
+
+    <!-- Mandatory Trust Language Baseline -->
+    <string name="trust_disclaimer">यह मंच आपको स्वतंत्र सेवा प्रदाताओं से जोड़ता है। मंच प्रदाता की योग्यता या व्यक्तिगत सुरक्षा की गारंटी नहीं देता है। प्रत्येक बैज स्पष्ट रूप से बताता है कि क्या सत्यापित किया गया है।</string>
+</resources>

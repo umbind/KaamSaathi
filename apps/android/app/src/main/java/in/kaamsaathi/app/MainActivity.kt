@@ -1,0 +1,97 @@
+package in.kaamsaathi.app
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.runtime.*
+import in.kaamsaathi.app.data.models.CustomerProfileData
+import in.kaamsaathi.app.data.models.ProviderOnboardData
+import in.kaamsaathi.app.ui.screens.*
+import in.kaamsaathi.app.ui.theme.KaamSaathiTheme
+
+enum class AppDestination {
+    LANGUAGE_SELECTION,
+    PHONE_AUTH,
+    OTP_VERIFY,
+    CUSTOMER_PROFILE,
+    PROVIDER_ONBOARD,
+    HOME
+}
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            KaamSaathiTheme {
+                var currentDestination by remember { mutableStateOf(AppDestination.LANGUAGE_SELECTION) }
+                var currentLanguage by remember { mutableStateOf("hi") }
+                var phoneNumber by remember { mutableStateOf("") }
+                var maskedPhone by remember { mutableStateOf("+91 987****210") }
+                var isLoading by remember { mutableStateOf(false) }
+                var errorMessage by remember { mutableStateOf<String?>(null) }
+
+                when (currentDestination) {
+                    AppDestination.LANGUAGE_SELECTION -> {
+                        LanguageSelectionScreen(
+                            currentLanguage = currentLanguage,
+                            onLanguageSelected = { lang -> currentLanguage = lang },
+                            onContinue = { currentDestination = AppDestination.PHONE_AUTH }
+                        )
+                    }
+                    AppDestination.PHONE_AUTH -> {
+                        PhoneAuthScreen(
+                            isLoading = isLoading,
+                            errorMessage = errorMessage,
+                            onRequestOtp = { phone ->
+                                phoneNumber = phone
+                                maskedPhone = phone.take(6) + "****" + phone.takeLast(3)
+                                currentDestination = AppDestination.OTP_VERIFY
+                            }
+                        )
+                    }
+                    AppDestination.OTP_VERIFY -> {
+                        OtpVerificationScreen(
+                            maskedPhone = maskedPhone,
+                            isLoading = isLoading,
+                            errorMessage = errorMessage,
+                            onVerifyOtp = { _ ->
+                                currentDestination = AppDestination.CUSTOMER_PROFILE
+                            },
+                            onResendOtp = {
+                                // Resend triggered
+                            }
+                        )
+                    }
+                    AppDestination.CUSTOMER_PROFILE -> {
+                        CustomerProfileScreen(
+                            currentLanguage = currentLanguage,
+                            initialData = null,
+                            isLoading = isLoading,
+                            errorMessage = errorMessage,
+                            onSaveProfile = { _ ->
+                                currentDestination = AppDestination.PROVIDER_ONBOARD
+                            }
+                        )
+                    }
+                    AppDestination.PROVIDER_ONBOARD -> {
+                        ProviderOnboardingScreen(
+                            isLoading = isLoading,
+                            errorMessage = errorMessage,
+                            onSubmitOnboarding = { _ ->
+                                currentDestination = AppDestination.HOME
+                            }
+                        )
+                    }
+                    AppDestination.HOME -> {
+                        // Home screen placeholder for Slice 1
+                        LanguageSelectionScreen(
+                            currentLanguage = currentLanguage,
+                            onLanguageSelected = { currentLanguage = it },
+                            onContinue = { currentDestination = AppDestination.CUSTOMER_PROFILE }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

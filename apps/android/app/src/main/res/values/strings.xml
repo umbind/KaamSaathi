@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">KaamSaathi</string>
+    <string name="tagline">Reliable Local Services Across Uttar Pradesh</string>
+
+    <!-- Language Selection SCR-C-LANG -->
+    <string name="select_language_title">Choose Your Language / भाषा चुनें</string>
+    <string name="select_language_subtitle">You can change this anytime in settings / आप इसे कभी भी बदल सकते हैं</string>
+    <string name="lang_hindi">हिंदी (Hindi)</string>
+    <string name="lang_english">English</string>
+    <string name="btn_continue">Continue</string>
+
+    <!-- Auth SCR-AUTH-PHONE & SCR-AUTH-OTP -->
+    <string name="login_title">Enter Mobile Number</string>
+    <string name="login_subtitle">We will send a 6-digit verification code</string>
+    <string name="phone_label">Mobile Number</string>
+    <string name="phone_prefix">+91</string>
+    <string name="phone_hint">98765 43210</string>
+    <string name="btn_get_otp">Get Verification Code</string>
+    <string name="otp_title">Verify OTP</string>
+    <string name="otp_subtitle">Enter 6-digit code sent to %1$s</string>
+    <string name="otp_resend">Resend Code</string>
+    <string name="otp_cooldown">Resend in %1$ds</string>
+    <string name="btn_verify">Verify &amp; Proceed</string>
+    <string name="otp_invalid_code">Invalid verification code. %1$d attempts remaining.</string>
+    <string name="otp_cooldown_active">Please wait before requesting another code.</string>
+
+    <!-- Profile SCR-C-PROFILE -->
+    <string name="profile_title">Complete Your Profile</string>
+    <string name="name_label">Full Name</string>
+    <string name="district_label">Select UP District</string>
+    <string name="locality_label">Locality / Area / Ward</string>
+    <string name="pincode_label">PIN Code (e.g. 226001)</string>
+    <string name="privacy_note">Your exact address and phone number are revealed only upon your explicit consent.</string>
+    <string name="btn_save_profile">Save Profile</string>
+
+    <!-- Provider Onboarding SCR-P-ONBOARD -->
+    <string name="provider_onboard_title">Register as a Service Provider</string>
+    <string name="provider_trade_label">Select Primary Trade</string>
+    <string name="trade_electrician">Electrician (बिजली मिस्त्री)</string>
+    <string name="trade_plumber">Plumber (नल मिस्त्री)</string>
+    <string name="trade_appliance">Appliance Repair (उपकरण मरम्मत)</string>
+    <string name="experience_label">Years of Experience</string>
+    <string name="service_radius_label">Service Radius (km)</string>
+    <string name="btn_submit_provider">Submit for Review</string>
+
+    <!-- Mandatory Trust Language Baseline -->
+    <string name="trust_disclaimer">The platform connects you with independent service providers. The platform does not guarantee provider competence or personal safety. Badges state verified background check credentials.</string>
+</resources>
