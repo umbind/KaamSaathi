@@ -11,6 +11,7 @@ import { ProviderService } from './modules/provider/provider.service.js';
 import { AdminVerificationService } from './modules/admin/admin-verification.service.js';
 import { RequestService } from './modules/request/request.service.js';
 import { BookingService } from './modules/booking/booking.service.js';
+import { JobService } from './modules/job/job.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
@@ -19,6 +20,7 @@ export class App {
   public readonly adminVerificationService = new AdminVerificationService();
   public readonly requestService = new RequestService();
   public readonly bookingService = new BookingService();
+  public readonly jobService = new JobService();
 
   async handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
     const correlationId = (req.headers['x-correlation-id'] as string) || crypto.randomUUID();
@@ -235,12 +237,47 @@ export class App {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
         responseBody = await this.bookingService.acceptQuote(authUser.sub, body, correlationId, clientIp);
         statusCode = 200;
-      } else if (method === 'GET' && pathname.startsWith('/api/v1/bookings/')) {
+      } else if (method === 'GET' && pathname.startsWith('/api/v1/bookings/') && !pathname.includes('/', 17)) {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
         const parts = pathname.split('/');
         const bookingId = parts[4];
         if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
         responseBody = await this.bookingService.getBookingDetails(authUser.sub, bookingId);
+      }
+      
+      // 7. Job Lifecycle, Change Orders, and Payments (Slice 5)
+      else if (method === 'PUT' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/status')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.jobService.updateJobStatus(authUser.sub, bookingId, body, correlationId);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/change-order')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.jobService.createChangeOrder(authUser.sub, bookingId, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/change-orders/') && pathname.endsWith('/review')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const changeOrderId = parts[4];
+        if (!changeOrderId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_change_order_id');
+        responseBody = await this.jobService.reviewChangeOrder(authUser.sub, changeOrderId, body, correlationId);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/bookings/') && pathname.endsWith('/payment')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const bookingId = parts[4];
+        if (!bookingId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_booking_id');
+        responseBody = await this.jobService.declarePayment(authUser.sub, bookingId, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/payments/') && pathname.endsWith('/confirm')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const paymentId = parts[4];
+        if (!paymentId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_payment_id');
+        responseBody = await this.jobService.confirmPayment(authUser.sub, paymentId, body, correlationId);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

@@ -180,6 +180,32 @@ export interface BookingRecord {
   updated_at: Date;
 }
 
+export interface ChangeOrderRecord {
+  id: string;
+  booking_id: string;
+  description: string;
+  additional_labor_paise: number;
+  additional_parts_paise: number;
+  total_additional_paise: number;
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
+  version: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+export interface PaymentRecord {
+  id: string;
+  booking_id: string;
+  payment_method: 'CASH' | 'UPI';
+  amount_paise: number;
+  reference_id?: string;
+  status: 'PROVIDER_DECLARED' | 'CONFIRMED' | 'DISPUTED';
+  declared_at: Date;
+  confirmed_at?: Date;
+  created_at: Date;
+  updated_at: Date;
+}
+
 export interface AuditLogRecord {
   id: number;
   entity_name: string;
@@ -209,6 +235,8 @@ export class InMemoryDatabase {
   private leads = new Map<string, LeadRecord>();
   private quotes = new Map<string, QuoteRecord>();
   private bookings = new Map<string, BookingRecord>();
+  private changeOrders = new Map<string, ChangeOrderRecord>();
+  private payments = new Map<string, PaymentRecord>();
   private idempotency = new Map<string, IdempotencyRecord>();
   private auditLogs: AuditLogRecord[] = [];
   private auditIdSequence = 1;
@@ -230,6 +258,8 @@ export class InMemoryDatabase {
     this.leads.clear();
     this.quotes.clear();
     this.bookings.clear();
+    this.changeOrders.clear();
+    this.payments.clear();
     this.idempotency.clear();
     this.auditLogs = [];
     this.auditIdSequence = 1;
@@ -491,6 +521,34 @@ export class InMemoryDatabase {
 
   findBookingsByProviderId(providerId: string): BookingRecord[] {
     return Array.from(this.bookings.values()).filter(b => b.provider_id === providerId);
+  }
+
+  // Change Orders
+  saveChangeOrder(order: ChangeOrderRecord): ChangeOrderRecord {
+    this.changeOrders.set(order.id, { ...order, updated_at: new Date() });
+    return order;
+  }
+
+  findChangeOrderById(id: string): ChangeOrderRecord | undefined {
+    return this.changeOrders.get(id);
+  }
+
+  findChangeOrdersByBookingId(bookingId: string): ChangeOrderRecord[] {
+    return Array.from(this.changeOrders.values()).filter(co => co.booking_id === bookingId);
+  }
+
+  // Payments
+  savePayment(payment: PaymentRecord): PaymentRecord {
+    this.payments.set(payment.id, { ...payment, updated_at: new Date() });
+    return payment;
+  }
+
+  findPaymentById(id: string): PaymentRecord | undefined {
+    return this.payments.get(id);
+  }
+
+  findPaymentByBookingId(bookingId: string): PaymentRecord | undefined {
+    return Array.from(this.payments.values()).find(p => p.booking_id === bookingId);
   }
 
   // Idempotency
