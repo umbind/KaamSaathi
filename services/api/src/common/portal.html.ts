@@ -431,7 +431,7 @@ export function getInteractivePortalHtml(): string {
       box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
     }
 
-    /* Card 1: Electrician (Dense Amber) */
+    /* Card 1: Electrician */
     .card-amber {
       background: linear-gradient(145deg, #FFFBEB 0%, #FEF3C7 100%);
       border: 3px solid #F59E0B;
@@ -443,7 +443,7 @@ export function getInteractivePortalHtml(): string {
     .card-amber .btn-card-action { background: #B45309; color: #FFFFFF; }
     .card-amber .btn-card-action:hover { background: #78350F; }
 
-    /* Card 2: Plumber (Dense Azure) */
+    /* Card 2: Plumber */
     .card-blue {
       background: linear-gradient(145deg, #F0F9FF 0%, #E0F2FE 100%);
       border: 3px solid #0284C7;
@@ -455,7 +455,7 @@ export function getInteractivePortalHtml(): string {
     .card-blue .btn-card-action { background: #0369A1; color: #FFFFFF; }
     .card-blue .btn-card-action:hover { background: #0C4A6E; }
 
-    /* Card 3: Appliance (Dense Cyan/Teal) */
+    /* Card 3: Appliance */
     .card-cyan {
       background: linear-gradient(145deg, #ECFEFF 0%, #CFFAFE 100%);
       border: 3px solid #0891B2;
@@ -464,10 +464,10 @@ export function getInteractivePortalHtml(): string {
     .card-cyan h3 { color: #0E7490; }
     .card-cyan p { color: #164E63; }
     .card-cyan .visit-tag { background: #A5F3FC; color: #0E7490; border: 2px solid #0891B2; }
-    .card-cyan .btn-card-action { background: #0E7490; color: #FFFFFF; }
+    .card-cyan .btn-card-action { background: #0891B2; color: #FFFFFF; }
     .card-cyan .btn-card-action:hover { background: #164E63; }
 
-    /* Card 4: Carpenter (Dense Terracotta/Orange) */
+    /* Card 4: Carpenter */
     .card-orange {
       background: linear-gradient(145deg, #FFF7ED 0%, #FFEDD5 100%);
       border: 3px solid #EA580C;
@@ -479,7 +479,7 @@ export function getInteractivePortalHtml(): string {
     .card-orange .btn-card-action { background: #C2410C; color: #FFFFFF; }
     .card-orange .btn-card-action:hover { background: #7C2D12; }
 
-    /* Card 5: Painter (Dense Royal Purple) */
+    /* Card 5: Painter */
     .card-purple {
       background: linear-gradient(145deg, #FAF5FF 0%, #F3E8FF 100%);
       border: 3px solid #9333EA;
@@ -491,7 +491,7 @@ export function getInteractivePortalHtml(): string {
     .card-purple .btn-card-action { background: #7E22CE; color: #FFFFFF; }
     .card-purple .btn-card-action:hover { background: #581C87; }
 
-    /* Card 6: Cleaning (Dense Emerald) */
+    /* Card 6: Cleaning */
     .card-emerald {
       background: linear-gradient(145deg, #ECFDF5 0%, #D1FAE5 100%);
       border: 3px solid #059669;
@@ -544,13 +544,128 @@ export function getInteractivePortalHtml(): string {
     .btn-card-action {
       border: none;
       font-weight: 800;
-      font-size: 0.92rem;
-      padding: 0.55rem 1.1rem;
+      font-size: 0.95rem;
+      padding: 0.55rem 1.2rem;
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.15s;
-      min-height: 42px;
+      min-height: 44px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .btn-card-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+
+    /* Interactive Quick Booking / Search Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      max-width: 580px;
+      width: 100%;
+      border: 3px solid #1E3A8A;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      overflow: hidden;
+      animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #1E3A8A 0%, #172554 100%);
+      color: white;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-close-modal {
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      width: 36px;
+      height: 36px;
+      min-height: auto;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .btn-close-modal:hover { background: #EF4444; }
+    .modal-body {
+      padding: 1.5rem;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-step-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #1E3A8A;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .problem-tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .problem-tag-pill {
+      background: #F1F5F9;
+      border: 2px solid #CBD5E1;
+      color: #1E293B;
+      font-size: 0.88rem;
+      font-weight: 700;
+      padding: 0.4rem 0.85rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      min-height: auto;
+      transition: all 0.15s;
+    }
+    .problem-tag-pill.selected {
+      background: #1E3A8A;
+      border-color: #1E3A8A;
+      color: white;
+    }
+    .matched-provider-preview {
+      background: #FFFBEB;
+      border: 2px solid #F59E0B;
+      border-radius: var(--radius-sm);
+      padding: 0.85rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
     }
 
     /* Live Interactive Pilot Console */
@@ -732,6 +847,30 @@ export function getInteractivePortalHtml(): string {
       word-break: break-word;
     }
 
+    /* Directory Filter Tabs */
+    .directory-filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .dir-filter-btn {
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      color: #1E293B;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .dir-filter-btn.active, .dir-filter-btn:hover {
+      background: #1E3A8A;
+      color: white;
+      border-color: #1E3A8A;
+    }
+
     /* Dense & Attractive Verified Providers Directory */
     .providers-grid {
       display: grid;
@@ -911,7 +1050,7 @@ export function getInteractivePortalHtml(): string {
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
     }
 
-    /* Pillar 1: Consumer Protection */
+    /* Pillar 1 */
     .legal-card-1 {
       background: linear-gradient(145deg, #FEF3C7 0%, #FDE68A 100%);
       border: 3px solid #F59E0B;
@@ -919,7 +1058,7 @@ export function getInteractivePortalHtml(): string {
     .legal-card-1 .legal-pill-title { color: #78350F; }
     .legal-card-1 .legal-pill-desc { color: #451A03; }
 
-    /* Pillar 2: Labor Shield */
+    /* Pillar 2 */
     .legal-card-2 {
       background: linear-gradient(145deg, #DBEAFE 0%, #BFDBFE 100%);
       border: 3px solid #2563EB;
@@ -927,7 +1066,7 @@ export function getInteractivePortalHtml(): string {
     .legal-card-2 .legal-pill-title { color: #1E3A8A; }
     .legal-card-2 .legal-pill-desc { color: #172554; }
 
-    /* Pillar 3: Police & Criminal Law */
+    /* Pillar 3 */
     .legal-card-3 {
       background: linear-gradient(145deg, #FEE2E2 0%, #FECACA 100%);
       border: 3px solid #DC2626;
@@ -935,7 +1074,7 @@ export function getInteractivePortalHtml(): string {
     .legal-card-3 .legal-pill-title { color: #991B1B; }
     .legal-card-3 .legal-pill-desc { color: #450A0A; }
 
-    /* Pillar 4: DPDP Data Privacy */
+    /* Pillar 4 */
     .legal-card-4 {
       background: linear-gradient(145deg, #F3E8FF 0%, #E9D5FF 100%);
       border: 3px solid #9333EA;
@@ -943,7 +1082,7 @@ export function getInteractivePortalHtml(): string {
     .legal-card-4 .legal-pill-title { color: #6B21A8; }
     .legal-card-4 .legal-pill-desc { color: #3B0764; }
 
-    /* Pillar 5: Tax & Direct Payment */
+    /* Pillar 5 */
     .legal-card-5 {
       background: linear-gradient(145deg, #D1FAE5 0%, #A7F3D0 100%);
       border: 3px solid #059669;
@@ -1094,11 +1233,11 @@ export function getInteractivePortalHtml(): string {
       <div id="searchResultBox" class="search-results-panel"></div>
     </section>
 
-    <!-- Services Grid (Dense & Attractive Colors) -->
+    <!-- Services Grid (Dense & Attractive Colors + Interactive Modals) -->
     <div id="services" class="section-header">
       <div>
         <h2 class="section-title">✨ लोकप्रिय सेवा श्रेणियां (Service Categories)</h2>
-        <p class="section-desc">पारदर्शी दरें, शून्य छिपा हुआ शुल्क, और घर बैठे कुशल कारीगरों की त्वरित सेवा।</p>
+        <p class="section-desc">नीचे किसी भी सेवा के बटन पर क्लिक करके तुरंत समस्या चुनें और नजदीकी कारीगर से संपर्क करें।</p>
       </div>
       <span class="badge-check" style="font-size:0.9rem; padding:0.45rem 0.95rem; background:#047857;">✓ 0% प्लेटफ़ॉर्म कमीशन</span>
     </div>
@@ -1113,7 +1252,9 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹120 - ₹150</div>
-          <button class="btn-card-action" onclick="quickSearch('bijli mistri')">मिस्त्री खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_electrician', 'बिजली मिस्त्री (Electrician)', '⚡', 150, ['पंखा बंद / आवाज़ कर रहा है', 'स्विच या सॉकेट जल गया', 'MCB बार-बार ट्रिप हो रही है', 'इन्वर्टर / मेन वायरिंग जांच', 'नया पंखा या लाइट फिटिंग'])">
+            <span>⚡ मिस्त्री खोजें</span>
+          </button>
         </div>
       </div>
 
@@ -1126,7 +1267,9 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹120 - ₹150</div>
-          <button class="btn-card-action" onclick="quickSearch('nal mistri')">प्लंबर खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_plumber', 'नल मिस्त्री / प्लंबर (Plumber)', '💧', 150, ['नल से पानी टपक रहा है (लीकेज)', 'पानी की मोटर नहीं चल रही', 'टंकी ओवरफ्लो / नई फिटिंग', 'कमोड / फ्लश रिपेयर', 'पाइपलाइन ब्लॉकेज / जाम'])">
+            <span>💧 प्लंबर खोजें</span>
+          </button>
         </div>
       </div>
 
@@ -1139,7 +1282,9 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹200</div>
-          <button class="btn-card-action" onclick="quickSearch('ac repair')">तकनीशियन खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_appliance', 'AC व उपकरण मरम्मत (Appliance Care)', '❄️', 200, ['AC कूलिंग नहीं कर रहा', 'AC गैस लीकेज / चार्जिंग', 'फ्रिज में बर्फ नहीं जम रही', 'वॉशिंग मशीन स्पिन नहीं कर रही', 'गीजर पानी गर्म नहीं कर रहा'])">
+            <span>❄️ तकनीशियन खोजें</span>
+          </button>
         </div>
       </div>
 
@@ -1152,7 +1297,9 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹150</div>
-          <button class="btn-card-action" onclick="quickSearch('carpenter')">बढ़ई खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_carpenter', 'बढ़ई / कारपेंटर (Carpenter)', '🚪', 150, ['दरवाज़ा अटक रहा है / बंद नहीं होता', 'नया लॉक या सिटकनी फिटिंग', 'अलमारी स्लाइडर व हिंज रिपेयर', 'बेड / सोफा की मरम्मत', 'मॉड्यूलर फर्नीचर असेंबली'])">
+            <span>🚪 बढ़ई खोजें</span>
+          </button>
         </div>
       </div>
 
@@ -1165,7 +1312,9 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹200</div>
-          <button class="btn-card-action" onclick="quickSearch('painter')">पेंटर खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_painter', 'पेंटर / रंगाई (Painter)', '🎨', 200, ['एक कमरे का टच-अप पेंट', 'सीलन / वॉटरप्रूफिंग उपचार', 'संपूर्ण घर का पुट्टी व पेंट', 'लकड़ी के दरवाज़ों की पॉलिश', 'लोहे की ग्रिल / गेट पेंटिंग'])">
+            <span>🎨 पेंटर खोजें</span>
+          </button>
         </div>
       </div>
 
@@ -1178,8 +1327,203 @@ export function getInteractivePortalHtml(): string {
         </div>
         <div class="service-footer">
           <div class="visit-tag">विजिट: ₹250</div>
-          <button class="btn-card-action" onclick="quickSearch('cleaning')">क्लीनर खोजें</button>
+          <button class="btn-card-action" onclick="openBookingModal('cat_cleaning', 'घर की डीप क्लीनिंग (Deep Cleaning)', '🧹', 250, ['बाथरूम टाइल्स एसिड वॉश', 'किचन चिमनी व डीग्रीजिंग', 'सोफा व गद्दों की वैक्यूमिंग', 'पूरे मकान की डीप क्लीनिंग', 'पानी की टंकी की अंदरूनी सफाई'])">
+            <span>🧹 क्लीनर खोजें</span>
+          </button>
         </div>
+      </div>
+    </div>
+
+    <!-- Interactive Booking / Contact Modal Dialog -->
+    <div id="bookingModal" class="modal-overlay">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3 id="modalTitle">⚡ सेवा का अनुरोध करें</h3>
+          <button class="btn-close-modal" onclick="closeBookingModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; background:#F8FAFC; padding:0.75rem 1rem; border-radius:8px; border:1px solid #CBD5E1;">
+            <div>
+              <span style="font-size:0.85rem; color:#64748B;">चयनित श्रेणी:</span>
+              <div id="modalCategoryBadge" style="font-weight:900; color:#1E3A8A; font-size:1.1rem;">बिजली मिस्त्री</div>
+            </div>
+            <div style="text-align:right;">
+              <span style="font-size:0.85rem; color:#64748B;">विजिट शुल्क:</span>
+              <div id="modalVisitFee" style="font-weight:900; color:#B45309; font-size:1.1rem;">₹150</div>
+            </div>
+          </div>
+
+          <!-- Step 1: Problem Selection -->
+          <div class="modal-step-title">1. अपनी समस्या चुनें (या नीचे लिखें):</div>
+          <div id="modalProblemTags" class="problem-tags-container"></div>
+          <input type="text" id="modalCustomDesc" class="search-input" style="padding-left:1rem; margin-bottom:1.25rem;" placeholder="अन्य समस्या का विवरण लिखें...">
+
+          <!-- Step 2: Location -->
+          <div class="modal-step-title">2. अपना जिला व मोहल्ला:</div>
+          <div style="display:flex; gap:0.5rem; margin-bottom:1.25rem;">
+            <select id="modalDistrictSelect" class="district-select" style="min-width:140px;">
+              <option value="lucknow">लखनऊ (Lucknow)</option>
+              <option value="varanasi">वाराणसी (Varanasi)</option>
+              <option value="kanpur_nagar">कानपुर नगर (Kanpur)</option>
+            </select>
+            <input type="text" id="modalAddress" class="search-input" style="padding-left:1rem;" placeholder="मोहल्ला (उदा: गोमती नगर, विभूति खंड)" value="गोमती नगर, विभूति खंड">
+          </div>
+
+          <!-- Step 3: Available Provider Preview -->
+          <div class="modal-step-title">3. इस अनुरोध को प्राप्त करने वाले नजदीकी कामसाथी:</div>
+          <div id="modalProviderPreview" class="matched-provider-preview">
+            <div style="font-size:2rem;">👨‍🔧</div>
+            <div style="flex:1;">
+              <div id="modalProviderName" style="font-weight:900; color:#0F172A;">रमेश चंद्र वर्मा (Verma Electricals)</div>
+              <div style="font-size:0.85rem; color:#64748B;">📍 गोमती नगर, लखनऊ • ★ 4.8 (56 कार्य पूर्ण)</div>
+              <div style="font-size:0.75rem; color:#065F46; font-weight:800;">✓ पहचान सत्यापित • ITI डिप्लोमा धारक</div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button id="btnModalSubmit" class="btn-search" style="width:100%; justify-content:center; padding:1rem; font-size:1.15rem;" onclick="submitModalRequest()">
+            <span>📲 मिस्त्री से संपर्क करें (Send Request)</span>
+          </button>
+          
+          <div id="modalSuccessBox" style="display:none; margin-top:1rem; background:#DCFCE7; border:2px solid #22C55E; color:#065F46; padding:1rem; border-radius:8px; font-size:0.95rem; line-height:1.5;">
+            <div style="font-weight:900; font-size:1.1rem; margin-bottom:0.4rem;">🎉 अनुरोध सफलतापूर्वक दर्ज हो गया!</div>
+            <div>आपका अनुरोध गोमती नगर के सत्यापित कारीगरों को भेज दिया गया है। कारीगर का कोटेशन प्राप्त होते ही फोन नंबर अनलॉक हो जाएगा।</div>
+            <div style="margin-top:0.75rem;">
+              <button class="btn-card-action" style="background:#065F46; color:white;" onclick="closeBookingModal(); scrollToProviders();">
+                👨‍🔧 कारीगर की पूरी प्रोफ़ाइल देखें
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verified Providers Directory (Dense & Rich Colors) -->
+    <div id="providers" class="section-header">
+      <div>
+        <h2 class="section-title">👨‍🔧 सत्यापित कामसाथी डायरेक्टरी (Verified Providers)</h2>
+        <p class="section-desc">उत्तर प्रदेश के सत्यापित और विश्वसनीय स्थानीय सेवा प्रदाता।</p>
+      </div>
+      <div style="font-size:0.9rem; color:#1E3A8A; font-weight:800; background:#DBEAFE; padding:0.4rem 0.8rem; border-radius:6px; border:1px solid #93C5FD;">
+        🔒 संपर्क विवरण सुरक्षित (Gated Contact Reveal - APP-002)
+      </div>
+    </div>
+
+    <!-- Category Filter Bar for Directory -->
+    <div class="directory-filter-bar">
+      <button class="dir-filter-btn active" onclick="filterProviders('all')">सभी कारीगर (All)</button>
+      <button class="dir-filter-btn" onclick="filterProviders('cat_electrician')">⚡ बिजली मिस्त्री</button>
+      <button class="dir-filter-btn" onclick="filterProviders('cat_plumber')">💧 नल मिस्त्री</button>
+      <button class="dir-filter-btn" onclick="filterProviders('cat_appliance')">❄️ उपकरण मरम्मत</button>
+    </div>
+
+    <div class="providers-grid">
+      <!-- Provider 1 -->
+      <div class="provider-card provider-card-1" data-cat="cat_electrician">
+        <div>
+          <div class="provider-head">
+            <div class="provider-avatar">र</div>
+            <div class="provider-info">
+              <h4>रमेश चंद्र वर्मा</h4>
+              <div class="provider-trade">वर्मा इलेक्ट्रिकल्स एवं हाउस वायरिंग</div>
+              <div class="provider-location">📍 गोमती नगर, लखनऊ (UP)</div>
+            </div>
+          </div>
+          <div>
+            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
+            <span class="badge-check" style="background:#1E3A8A;">✓ ITI इलेक्ट्रीशियन</span>
+            <span class="badge-check" style="background:#B45309;">✓ वायरमैन लाइसेंस</span>
+          </div>
+          <div class="provider-stats">
+            <div>
+              <div class="stat-val">★ 4.8</div>
+              <div class="stat-lbl">रेटिंग (56 कार्य)</div>
+            </div>
+            <div>
+              <div class="stat-val">8 वर्ष</div>
+              <div class="stat-lbl">अनुभव</div>
+            </div>
+            <div>
+              <div class="stat-val">₹150</div>
+              <div class="stat-lbl">विजिट शुल्क</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-provider-action" onclick="openBookingModal('cat_electrician', 'बिजली मिस्त्री (Electrician)', '⚡', 150, ['पंखा रिपेयर', 'स्विच-सॉकेट', 'MCB ट्रिपिंग'])">
+          ⚡ कोटेशन का अनुरोध भेजें
+        </button>
+      </div>
+
+      <!-- Provider 2 -->
+      <div class="provider-card provider-card-2" data-cat="cat_plumber">
+        <div>
+          <div class="provider-head">
+            <div class="provider-avatar">सु</div>
+            <div class="provider-info">
+              <h4>सुरेश कुमार यादव</h4>
+              <div class="provider-trade">यादव सेनेटरी एवं प्लंबिंग वर्क्स</div>
+              <div class="provider-location">📍 आलमबाग, लखनऊ (UP)</div>
+            </div>
+          </div>
+          <div>
+            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
+            <span class="badge-check" style="background:#0369A1;">✓ पुलिस सत्यापनीय</span>
+            <span class="badge-check" style="background:#047857;">✓ 100% संतोष दर</span>
+          </div>
+          <div class="provider-stats">
+            <div>
+              <div class="stat-val">★ 4.7</div>
+              <div class="stat-lbl">रेटिंग (48 कार्य)</div>
+            </div>
+            <div>
+              <div class="stat-val">10 वर्ष</div>
+              <div class="stat-lbl">अनुभव</div>
+            </div>
+            <div>
+              <div class="stat-val">₹150</div>
+              <div class="stat-lbl">विजिट शुल्क</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-provider-action" onclick="openBookingModal('cat_plumber', 'नल मिस्त्री / प्लंबर (Plumber)', '💧', 150, ['नल लीकेज', 'मोटर रिपेयर', 'टंकी फिटिंग'])">
+          💧 कोटेशन का अनुरोध भेजें
+        </button>
+      </div>
+
+      <!-- Provider 3 -->
+      <div class="provider-card provider-card-3" data-cat="cat_appliance">
+        <div>
+          <div class="provider-head">
+            <div class="provider-avatar">मो</div>
+            <div class="provider-info">
+              <h4>मोहम्मद इमरान</h4>
+              <div class="provider-trade">इमरान कूल केयर एवं AC सर्विस</div>
+              <div class="provider-location">📍 हजरतगंज, लखनऊ (UP)</div>
+            </div>
+          </div>
+          <div>
+            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
+            <span class="badge-check" style="background:#0891B2;">✓ HVAC प्रमाणित</span>
+            <span class="badge-check" style="background:#7C2D12;">✓ उपकरण विशेषज्ञ</span>
+          </div>
+          <div class="provider-stats">
+            <div>
+              <div class="stat-val">★ 4.9</div>
+              <div class="stat-lbl">रेटिंग (72 कार्य)</div>
+            </div>
+            <div>
+              <div class="stat-val">6 वर्ष</div>
+              <div class="stat-lbl">अनुभव</div>
+            </div>
+            <div>
+              <div class="stat-val">₹200</div>
+              <div class="stat-lbl">विजिट शुल्क</div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-provider-action" onclick="openBookingModal('cat_appliance', 'AC व उपकरण मरम्मत (Appliance Care)', '❄️', 200, ['AC सर्विस', 'गैस चार्जिंग', 'फ्रिज रिपेयर'])">
+          ❄️ कोटेशन का अनुरोध भेजें
+        </button>
       </div>
     </div>
 
@@ -1233,7 +1577,7 @@ export function getInteractivePortalHtml(): string {
             </div>
           </div>
 
-          <!-- Tab 2: Provider Controls (Hidden initially) -->
+          <!-- Tab 2: Provider Controls -->
           <div id="providerControls" style="display:none;">
             <label class="form-label">सीधे प्रदाता चुनें (Quick Pre-fill Provider):</label>
             <div style="display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.25rem;">
@@ -1266,7 +1610,7 @@ export function getInteractivePortalHtml(): string {
             </div>
           </div>
 
-          <!-- Tab 3: Admin Controls (Hidden initially) -->
+          <!-- Tab 3: Admin Controls -->
           <div id="adminControls" style="display:none;">
             <label class="form-label">प्रशासक लॉगिन क्रेडेंशियल्स (Admin Credentials):</label>
             <input type="text" id="adminEmailInput" class="console-input" value="admin@kaamsaathi.in">
@@ -1297,130 +1641,9 @@ export function getInteractivePortalHtml(): string {
             <span id="terminalStatusBadge" style="color:#22C55E;">IDLE</span>
           </div>
           <div id="terminalOutput" class="terminal-code">// कामसाथी इंटरएक्टिव API कंसोल तैयार है।
-// बाएं पैनल से कोई भी खाता चुनें और 'OTP भेजें' या 'लॉगिन करें' पर क्लिक करें।
+// किसी भी सेवा कार्ड के 'खोजें' बटन पर क्लिक करके सीधे मोडल से अनुरोध दर्ज करें।
 // सभी एंडपॉइंट्स वास्तविक इन-मेमोरी टेस्ट डेटाबेस से जुड़े हैं।</div>
         </div>
-      </div>
-    </div>
-
-    <!-- Verified Providers Directory (Dense & Rich Colors) -->
-    <div id="providers" class="section-header">
-      <div>
-        <h2 class="section-title">👨‍🔧 सत्यापित कामसाथी डायरेक्टरी (Verified Providers)</h2>
-        <p class="section-desc">उत्तर प्रदेश के सत्यापित और विश्वसनीय स्थानीय सेवा प्रदाता।</p>
-      </div>
-      <div style="font-size:0.9rem; color:#1E3A8A; font-weight:800; background:#DBEAFE; padding:0.4rem 0.8rem; border-radius:6px; border:1px solid #93C5FD;">
-        🔒 संपर्क विवरण सुरक्षित (Gated Contact Reveal - APP-002)
-      </div>
-    </div>
-
-    <div class="providers-grid">
-      <!-- Provider 1 -->
-      <div class="provider-card provider-card-1">
-        <div>
-          <div class="provider-head">
-            <div class="provider-avatar">र</div>
-            <div class="provider-info">
-              <h4>रमेश चंद्र वर्मा</h4>
-              <div class="provider-trade">वर्मा इलेक्ट्रिकल्स एवं हाउस वायरिंग</div>
-              <div class="provider-location">📍 गोमती नगर, लखनऊ (UP)</div>
-            </div>
-          </div>
-          <div>
-            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
-            <span class="badge-check" style="background:#1E3A8A;">✓ ITI इलेक्ट्रीशियन</span>
-            <span class="badge-check" style="background:#B45309;">✓ वायरमैन लाइसेंस</span>
-          </div>
-          <div class="provider-stats">
-            <div>
-              <div class="stat-val">★ 4.8</div>
-              <div class="stat-lbl">रेटिंग (56 कार्य)</div>
-            </div>
-            <div>
-              <div class="stat-val">8 वर्ष</div>
-              <div class="stat-lbl">अनुभव</div>
-            </div>
-            <div>
-              <div class="stat-val">₹150</div>
-              <div class="stat-lbl">विजिट शुल्क</div>
-            </div>
-          </div>
-        </div>
-        <button class="btn-provider-action" onclick="quickBookProvider('+919876500101', 'रमेश चंद्र वर्मा', 'Electrician')">
-          ⚡ कोटेशन का अनुरोध भेजें
-        </button>
-      </div>
-
-      <!-- Provider 2 -->
-      <div class="provider-card provider-card-2">
-        <div>
-          <div class="provider-head">
-            <div class="provider-avatar">सु</div>
-            <div class="provider-info">
-              <h4>सुरेश कुमार यादव</h4>
-              <div class="provider-trade">यादव सेनेटरी एवं प्लंबिंग वर्क्स</div>
-              <div class="provider-location">📍 आलमबाग, लखनऊ (UP)</div>
-            </div>
-          </div>
-          <div>
-            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
-            <span class="badge-check" style="background:#0369A1;">✓ पुलिस सत्यापनीय</span>
-            <span class="badge-check" style="background:#047857;">✓ 100% संतोष दर</span>
-          </div>
-          <div class="provider-stats">
-            <div>
-              <div class="stat-val">★ 4.7</div>
-              <div class="stat-lbl">रेटिंग (48 कार्य)</div>
-            </div>
-            <div>
-              <div class="stat-val">10 वर्ष</div>
-              <div class="stat-lbl">अनुभव</div>
-            </div>
-            <div>
-              <div class="stat-val">₹150</div>
-              <div class="stat-lbl">विजिट शुल्क</div>
-            </div>
-          </div>
-        </div>
-        <button class="btn-provider-action" onclick="quickBookProvider('+919876500102', 'सुरेश कुमार यादव', 'Plumber')">
-          💧 कोटेशन का अनुरोध भेजें
-        </button>
-      </div>
-
-      <!-- Provider 3 -->
-      <div class="provider-card provider-card-3">
-        <div>
-          <div class="provider-head">
-            <div class="provider-avatar">मो</div>
-            <div class="provider-info">
-              <h4>मोहम्मद इमरान</h4>
-              <div class="provider-trade">इमरान कूल केयर एवं AC सर्विस</div>
-              <div class="provider-location">📍 हजरतगंज, लखनऊ (UP)</div>
-            </div>
-          </div>
-          <div>
-            <span class="badge-check">✓ पहचान पत्र सत्यापित</span>
-            <span class="badge-check" style="background:#0891B2;">✓ HVAC प्रमाणित</span>
-            <span class="badge-check" style="background:#7C2D12;">✓ उपकरण विशेषज्ञ</span>
-          </div>
-          <div class="provider-stats">
-            <div>
-              <div class="stat-val">★ 4.9</div>
-              <div class="stat-lbl">रेटिंग (72 कार्य)</div>
-            </div>
-            <div>
-              <div class="stat-val">6 वर्ष</div>
-              <div class="stat-lbl">अनुभव</div>
-            </div>
-            <div>
-              <div class="stat-val">₹200</div>
-              <div class="stat-lbl">विजिट शुल्क</div>
-            </div>
-          </div>
-        </div>
-        <button class="btn-provider-action" onclick="quickBookProvider('+919876500103', 'मोहम्मद इमरान', 'Appliance Repair')">
-          ❄️ कोटेशन का अनुरोध भेजें
-        </button>
       </div>
     </div>
 
@@ -1520,6 +1743,7 @@ export function getInteractivePortalHtml(): string {
     let currentCustomerToken = null;
     let currentProviderToken = null;
     let currentAdminToken = null;
+    let activeModalCategoryId = null;
 
     function setTerminalOutput(title, status, data, latencyMs) {
       const badge = document.getElementById('terminalStatusBadge');
@@ -1530,6 +1754,124 @@ export function getInteractivePortalHtml(): string {
       terminal.innerText = '>>> ' + title + '\\n' +
                            (status ? '>>> STATUS: ' + status + ' | LATENCY: ' + latencyMs + 'ms\\n\\n' : '') +
                            (typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+    }
+
+    // Modal Functions
+    function openBookingModal(catId, catName, icon, visitPaise, problemTags) {
+      activeModalCategoryId = catId;
+      document.getElementById('modalTitle').innerHTML = icon + ' ' + catName + ' खोजें व संपर्क करें';
+      document.getElementById('modalCategoryBadge').innerText = catName;
+      document.getElementById('modalVisitFee').innerText = '₹' + visitPaise;
+      document.getElementById('modalSuccessBox').style.display = 'none';
+      document.getElementById('btnModalSubmit').style.display = 'flex';
+
+      // Set matched provider name
+      const provNameEl = document.getElementById('modalProviderName');
+      if (catId === 'cat_electrician') {
+        provNameEl.innerHTML = 'रमेश चंद्र वर्मा (Verma Electricals) • ★ 4.8';
+      } else if (catId === 'cat_plumber') {
+        provNameEl.innerHTML = 'सुरेश कुमार यादव (Yadav Sanitation) • ★ 4.7';
+      } else {
+        provNameEl.innerHTML = 'मोहम्मद इमरान (Imran Cool Care) • ★ 4.9';
+      }
+
+      // Populate problem tags
+      const tagsContainer = document.getElementById('modalProblemTags');
+      tagsContainer.innerHTML = '';
+      problemTags.forEach((tag, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'problem-tag-pill' + (idx === 0 ? ' selected' : '');
+        btn.innerText = tag;
+        btn.onclick = function() {
+          btn.classList.toggle('selected');
+        };
+        tagsContainer.appendChild(btn);
+      });
+
+      // Filter providers directory below
+      filterProviders(catId);
+
+      // Show modal
+      document.getElementById('bookingModal').classList.add('active');
+    }
+
+    function closeBookingModal() {
+      document.getElementById('bookingModal').classList.remove('active');
+    }
+
+    function scrollToProviders() {
+      document.getElementById('providers').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterProviders(catId) {
+      // Update filter tabs
+      const filterBtns = document.querySelectorAll('.dir-filter-btn');
+      filterBtns.forEach(btn => btn.classList.remove('active'));
+
+      const cards = document.querySelectorAll('.providers-grid .provider-card');
+      cards.forEach(card => {
+        if (catId === 'all' || card.getAttribute('data-cat') === catId) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    async function submitModalRequest() {
+      const selectedPills = document.querySelectorAll('#modalProblemTags .problem-tag-pill.selected');
+      const pillTexts = Array.from(selectedPills).map(p => p.innerText);
+      const customDesc = document.getElementById('modalCustomDesc').value;
+      const finalDesc = (pillTexts.join(', ') + (customDesc ? ' — ' + customDesc : '')).trim() || 'त्वरित मरम्मत आवश्यकता';
+
+      const district = document.getElementById('modalDistrictSelect').value;
+      const address = document.getElementById('modalAddress').value || 'गोमती नगर, विभूति खंड, लखनऊ';
+
+      // If user is not yet logged in, auto-login customer first for seamless UX
+      if (!currentCustomerToken) {
+        try {
+          const authRes = await fetch('/api/v1/auth/otp/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone_number: '+919876500901', otp_code: '123456' })
+          });
+          const authData = await authRes.json();
+          if (authData.access_token) {
+            currentCustomerToken = authData.access_token;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/v1/requests', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + currentCustomerToken
+          },
+          body: JSON.stringify({
+            category_id: activeModalCategoryId || 'cat_electrician',
+            district_id: district,
+            address_line: address,
+            description: finalDesc,
+            service_timing: 'IMMEDIATE',
+            photos: []
+          })
+        });
+        const data = await res.json();
+        const latency = Math.round(performance.now() - t0);
+
+        setTerminalOutput('POST /api/v1/requests (Modal Service Booking)', res.status, data, latency);
+
+        // Show success state in modal
+        document.getElementById('btnModalSubmit').style.display = 'none';
+        document.getElementById('modalSuccessBox').style.display = 'block';
+      } catch (err) {
+        alert('अनुरोध भेजने में त्रुटि: ' + err.message);
+      }
     }
 
     function switchConsoleTab(tab) {
@@ -1857,18 +2199,6 @@ export function getInteractivePortalHtml(): string {
       } catch (err) {
         setTerminalOutput('हेल्थ चेक विफल', 500, err.message, 0);
       }
-    }
-
-    function quickBookProvider(phone, name, trade) {
-      switchConsoleTab('customer');
-      document.getElementById('console').scrollIntoView({ behavior: 'smooth' });
-      setTerminalOutput('कारीगर चयन: ' + name + ' (' + trade + ')', 200, {
-        selected_provider: name,
-        trade: trade,
-        phone: phone,
-        status: 'READY_TO_BOOK_OR_REQUEST_QUOTE',
-        action_note: 'कृपया ग्राहक के रूप में लॉगिन करके \'नया अनुरोध\' बटन दबाएं।'
-      }, 0);
     }
   </script>
 </body>
