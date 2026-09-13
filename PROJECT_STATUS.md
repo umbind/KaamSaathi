@@ -2,10 +2,10 @@
 
 ## Overall
 
-- Current stage: Phase 5 (Vertical Slice 6 Verified; Proceeding to Slice 7 & 8 Admin Operations and Public Web)
-- Overall status: `IN_PROGRESS` (Slices 1, 2, 3, 4, 5, and 6 implementation & automated verification complete)
+- Current stage: Phase 6 (Vertical Slices 1-8 Verified; Proceeding to Milestone 10 Hardening & Staging)
+- Overall status: `VERIFIED` (All vertical slices 1 through 8 implementation & automated verification complete)
 - Target environment: Local Development (Node.js 24 + pnpm 12 + TypeScript) -> Non-production Staging
-- Current release/version: v0.1.0-alpha.6
+- Current release/version: v0.1.0-alpha.8
 - Last evidence update: 2026-09-13
 - Primary owner: Umesh Kumar (Project Owner & Product Sponsor)
 
@@ -23,8 +23,8 @@
 | M6 — Quotes and booking (Slice 4) | @backend / @android | `VERIFIED` | M5 | Lead dispatch, quotes, comparison, atomic booking | `VERIFIED` (66 tests) | Pass | `VERIFIED` | Local | Complete |
 | M7 — Job lifecycle and payments (Slice 5) | @backend / @android | `VERIFIED` | M6 | En route, arrive, start, change order, completion, pay | `VERIFIED` (75 tests) | Pass | `VERIFIED` | Local | Complete |
 | M8 — Reviews, complaints, and safety (Slice 6) | @support / @security | `VERIFIED` | M7 | Verified reviews, disputes, safety escalation, appeals | `VERIFIED` (83 tests) | Pass | `VERIFIED` | Local | Complete |
-| M9 — Admin and public web (Slice 7 & 8) | @web | `IN_PROGRESS` | M8 | Admin RBAC/MFA, audit logs, public website, SEO | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Local | Active |
-| M10 — Hardening and staging | @qa / @sre / @challenger | `NOT_STARTED` | M9 | Threat modeling, chaos/retry tests, staging deployment | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Owner gate |
+| M9 — Admin and public web (Slice 7 & 8) | @web | `VERIFIED` | M8 | Admin RBAC/MFA, audit logs, public website, SEO | `VERIFIED` (91 tests) | Pass | `VERIFIED` | Local | Complete |
+| M10 — Hardening and staging | @qa / @sre / @challenger | `IN_PROGRESS` | M9 | Threat modeling, chaos/retry tests, staging deployment | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Active |
 | M11 — Closed pilot readiness | @product / @ops | `NOT_STARTED` | M10 | Supply onboarding, pilot location configuration | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Owner gate |
 | M12 — Release-candidate audit | @auditor | `NOT_STARTED` | M11 | Independent rerun of critical commands, final verdict | `NOT_STARTED` | `NOT_STARTED` | `NOT_STARTED` | Staging | Owner gate |
 

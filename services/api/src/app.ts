@@ -13,12 +13,14 @@ import { RequestService } from './modules/request/request.service.js';
 import { BookingService } from './modules/booking/booking.service.js';
 import { JobService } from './modules/job/job.service.js';
 import { ReviewAndSafetyService } from './modules/review/review.service.js';
+import { AdminOperationsService } from './modules/admin/admin-operations.service.js';
 
 export class App {
   public readonly identityService = new IdentityService();
   public readonly customerService = new CustomerService();
   public readonly providerService = new ProviderService();
   public readonly adminVerificationService = new AdminVerificationService();
+  public readonly adminOperationsService = new AdminOperationsService();
   public readonly requestService = new RequestService();
   public readonly bookingService = new BookingService();
   public readonly jobService = new JobService();
@@ -321,6 +323,41 @@ export class App {
       } else if (method === 'GET' && pathname === '/api/v1/provider/earnings') {
         if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
         responseBody = await this.reviewService.getProviderEarningsSummary(authUser.sub);
+      }
+      
+      // 9. Admin Operations (Slice 7)
+      else if (method === 'POST' && pathname.startsWith('/api/v1/admin/disputes/') && pathname.endsWith('/resolve')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const disputeId = parts[5];
+        if (!disputeId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_dispute_id');
+        responseBody = await this.adminOperationsService.resolveDispute(authUser.sub, disputeId, body, correlationId);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/admin/safety/') && pathname.endsWith('/resolve')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const incidentId = parts[5];
+        if (!incidentId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_incident_id');
+        responseBody = await this.adminOperationsService.resolveSafetyIncident(authUser.sub, incidentId, body, correlationId);
+      } else if (method === 'POST' && pathname.startsWith('/api/v1/admin/providers/') && pathname.endsWith('/restrict')) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const providerId = parts[5];
+        if (!providerId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_provider_id');
+        responseBody = await this.adminOperationsService.restrictProvider(authUser.sub, providerId, body, correlationId);
+      } else if (method === 'POST' && pathname === '/api/v1/admin/categories') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        responseBody = await this.adminOperationsService.createCategory(authUser.sub, body, correlationId);
+        statusCode = 201;
+      } else if (method === 'PUT' && pathname.startsWith('/api/v1/admin/categories/') && !pathname.includes('/', 24)) {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const parts = pathname.split('/');
+        const categoryId = parts[5];
+        if (!categoryId) throw new AppError(400, StandardErrorCode.INVALID_INPUT, 'errors.invalid_category_id');
+        responseBody = await this.adminOperationsService.updateCategory(authUser.sub, categoryId, body, correlationId);
+      } else if (method === 'GET' && pathname === '/api/v1/admin/audit-logs') {
+        if (!authUser) throw new AppError(401, StandardErrorCode.UNAUTHORIZED, 'errors.unauthorized');
+        const entityName = url.searchParams.get('entity_name') || undefined;
+        responseBody = await this.adminOperationsService.getAuditLogs(authUser.sub, entityName);
       } else {
         throw new AppError(404, StandardErrorCode.NOT_FOUND, 'errors.endpoint_not_found');
       }

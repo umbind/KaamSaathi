@@ -47,4 +47,50 @@ test('Admin Portal Client Security Invariants', async (t) => {
       /Authentication required/
     );
   });
+
+  await t.test('Admin operations (disputes, safety, categories, provider restriction) require active session', async () => {
+    const client = new AdminPortalService('http://localhost:3000');
+
+    await assert.rejects(
+      async () => {
+        await client.resolveDispute('disp_1', { action: 'RESOLVE', resolution_notes: 'Resolved' });
+      },
+      /Authentication required/
+    );
+
+    await assert.rejects(
+      async () => {
+        await client.resolveSafetyIncident('safe_1', { action: 'RESOLVE', resolution_notes: 'Checked' });
+      },
+      /Authentication required/
+    );
+
+    await assert.rejects(
+      async () => {
+        await client.restrictProvider('prov_1', { reason: 'Violation' });
+      },
+      /Authentication required/
+    );
+
+    await assert.rejects(
+      async () => {
+        await client.createCategory({
+          id: 'carpenter',
+          name_en: 'Carpenter',
+          name_hi: 'बढ़ई',
+          icon_name: 'hammer',
+          display_order: 4,
+          is_active: true,
+        });
+      },
+      /Authentication required/
+    );
+
+    await assert.rejects(
+      async () => {
+        await client.getAuditLogs('Booking');
+      },
+      /Authentication required/
+    );
+  });
 });

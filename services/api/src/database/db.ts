@@ -462,6 +462,11 @@ export class InMemoryDatabase {
     return this.categories.get(id);
   }
 
+  saveCategory(cat: CategoryRecord): CategoryRecord {
+    this.categories.set(cat.id, cat);
+    return cat;
+  }
+
   // Provider Coverage
   saveProviderCoverage(coverage: ProviderCoverageRecord): ProviderCoverageRecord {
     this.providerCoverage.set(coverage.provider_id, coverage);

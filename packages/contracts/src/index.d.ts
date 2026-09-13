@@ -7,4 +7,5 @@ export * from './requests.js';
 export * from './booking.js';
 export * from './jobs.js';
 export * from './reviews.js';
+export * from './admin.js';
 //# sourceMappingURL=index.d.ts.map
