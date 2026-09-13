@@ -1178,6 +1178,7 @@ export function getInteractivePortalHtml(): string {
         <a href="#services" class="nav-btn">✨ सेवाएं</a>
         <a href="#providers" class="nav-btn">👨‍🔧 कारीगर</a>
         <a href="#console" class="nav-btn" style="background:#1E3A8A; border-color:#38BDF8; color:#38BDF8;">⚡ टेस्ट कंसोल</a>
+        <a href="#console" onclick="switchConsoleTab('admin')" class="nav-btn" style="background:#7F1D1D; border-color:#EF4444; color:#FDE047;">🔐 व्यवस्थापक लॉगिन</a>
         <a href="#legal" class="nav-btn">🛡️ 360° विधिक कवच</a>
       </div>
     </div>
@@ -1694,23 +1695,47 @@ export function getInteractivePortalHtml(): string {
 
           <!-- Tab 3: Admin Controls -->
           <div id="adminControls" style="display:none;">
-            <label class="form-label">प्रशासक लॉगिन क्रेडेंशियल्स (Admin Credentials):</label>
-            <input type="text" id="adminEmailInput" class="console-input" value="admin@kaamsaathi.in">
-            <input type="password" id="adminPasswordInput" class="console-input" value="Admin@Pass1234!">
-
-            <div style="display:flex; gap:0.6rem; margin-bottom:1.5rem;">
-              <div style="flex:1;">
-                <label class="form-label" for="adminTotpInput">TOTP कोड (2FA):</label>
-                <input type="text" id="adminTotpInput" class="console-input" value="000000" style="margin-bottom:0;">
-              </div>
-              <div style="align-self:flex-end;">
-                <button class="btn-console-action btn-console-success" onclick="loginAdmin()">प्रशासक लॉगिन करें</button>
+            <div style="background:#0F172A; border-left:4px solid #F59E0B; padding:0.85rem 1rem; border-radius:8px; margin-bottom:1.25rem; border:1px solid #334155;">
+              <div style="font-weight:900; color:#FDE047; font-size:0.95rem; margin-bottom:0.35rem;">🔐 व्यवस्थापक लॉगिन क्रेडेंशियल्स (Admin Credentials):</div>
+              <div style="font-size:0.85rem; color:#CBD5E1; line-height:1.5;">
+                • <strong>ईमेल:</strong> <code style="color:#93C5FD; font-size:0.9rem;">admin@kaamsaathi.in</code><br>
+                • <strong>पासवर्ड:</strong> <code style="color:#93C5FD; font-size:0.9rem;">AdminSecurePassword123!</code><br>
+                • <strong>2FA MFA:</strong> RFC 6238 TOTP (सुरक्षा हेतु 30 सेकंड में नया कोड बनता है। नीचे बटन दबाकर तुरंत लोड करें)
               </div>
             </div>
 
-            <label class="form-label">अनुपालन व प्रशासन क्रियाएं:</label>
+            <label class="form-label" for="adminEmailInput">व्यवस्थापक ईमेल (Admin Email):</label>
+            <input type="text" id="adminEmailInput" class="console-input" value="admin@kaamsaathi.in">
+
+            <label class="form-label" for="adminPasswordInput">पासवर्ड (Password):</label>
+            <input type="password" id="adminPasswordInput" class="console-input" value="AdminSecurePassword123!">
+
+            <div style="display:flex; gap:0.6rem; align-items:flex-end; margin-bottom:1.25rem; flex-wrap:wrap;">
+              <div style="flex:1; min-width:180px;">
+                <label class="form-label" for="adminTotpInput">2FA TOTP कोड (6 अंक):</label>
+                <input type="text" id="adminTotpInput" class="console-input" value="" placeholder="जैसे 240423" style="margin-bottom:0; font-family:monospace; font-size:1.15rem; font-weight:900; letter-spacing:3px; color:#FDE047; background:#0F172A;">
+              </div>
+              <div>
+                <button type="button" class="btn-console-action" style="background:#0284C7; border-color:#38BDF8; font-weight:800;" onclick="fetchAdminTotp()">
+                  🔄 1-क्लिक TOTP भरें
+                </button>
+              </div>
+              <div>
+                <button type="button" class="btn-console-action btn-console-success" style="font-weight:900;" onclick="loginAdmin()">
+                  🔐 व्यवस्थापक लॉगिन
+                </button>
+              </div>
+            </div>
+
+            <div id="adminAuthBadge" style="display:none; margin-bottom:1rem; background:#065F46; color:#D1FAE5; padding:0.65rem 1rem; border-radius:8px; font-weight:800; border:1px solid #10B981; font-size:0.92rem;">
+              ✅ व्यवस्थापक सत्र सक्रिय (Admin Session Active)
+            </div>
+
+            <label class="form-label">अनुपालन व प्रशासन क्रियाएं (Admin Operations):</label>
             <div class="action-button-grid">
               <button class="btn-console-action" onclick="fetchAdminVerificationQueue()">📋 सत्यापन कतार (Queue)</button>
+              <button class="btn-console-action" onclick="fetchAdminAuditLogs()">📜 सिस्टम ऑडिट लॉग्स (Audit Logs)</button>
+              <button class="btn-console-action" onclick="fetchAdminCategories()">📂 सेवा श्रेणियां (Categories)</button>
               <button class="btn-console-action" onclick="checkApiHealth()">💚 API स्वास्थ्य स्थिति (Health)</button>
             </div>
           </div>
@@ -2044,6 +2069,7 @@ export function getInteractivePortalHtml(): string {
       } else if (tab === 'admin') {
         document.getElementById('tabAdmin').classList.add('active');
         document.getElementById('adminControls').style.display = 'block';
+        fetchAdminTotp();
       }
     }
 
@@ -2301,6 +2327,27 @@ export function getInteractivePortalHtml(): string {
     }
 
     // Admin Flow
+    async function fetchAdminTotp() {
+      try {
+        const res = await fetch('/api/v1/admin/auth/pilot-totp');
+        const data = await res.json();
+        if (data.totp_code) {
+          const totpInput = document.getElementById('adminTotpInput');
+          if (totpInput) {
+            totpInput.value = data.totp_code;
+          }
+          setTerminalOutput('GET /api/v1/admin/auth/pilot-totp', 200, {
+            status: 'SUCCESS',
+            message: 'पायलट 2FA TOTP कोड प्राप्त हुआ',
+            totp_code: data.totp_code,
+            valid_for_seconds: data.expires_in_seconds
+          }, 0);
+        }
+      } catch (err) {
+        console.error('TOTP fetch error:', err);
+      }
+    }
+
     async function loginAdmin() {
       const email = document.getElementById('adminEmailInput').value;
       const password = document.getElementById('adminPasswordInput').value;
@@ -2316,6 +2363,11 @@ export function getInteractivePortalHtml(): string {
         const latency = Math.round(performance.now() - t0);
         if (data.access_token) {
           currentAdminToken = data.access_token;
+          const badge = document.getElementById('adminAuthBadge');
+          if (badge) {
+            badge.style.display = 'block';
+            badge.innerHTML = '✅ व्यवस्थापक सत्र सक्रिय (Admin Authenticated: ' + data.user.id + ')';
+          }
         }
         setTerminalOutput('POST /api/v1/admin/auth/login', res.status, data, latency);
       } catch (err) {
@@ -2338,6 +2390,36 @@ export function getInteractivePortalHtml(): string {
         setTerminalOutput('GET /api/v1/admin/verifications/queue', res.status, data, latency);
       } catch (err) {
         setTerminalOutput('कतार लोड विफल', 500, err.message, 0);
+      }
+    }
+
+    async function fetchAdminAuditLogs() {
+      if (!currentAdminToken) {
+        alert('कृपया पहले व्यवस्थापक लॉगिन करें!');
+        return;
+      }
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/v1/admin/audit-logs', {
+          headers: { 'Authorization': 'Bearer ' + currentAdminToken }
+        });
+        const data = await res.json();
+        const latency = Math.round(performance.now() - t0);
+        setTerminalOutput('GET /api/v1/admin/audit-logs', res.status, data, latency);
+      } catch (err) {
+        setTerminalOutput('ऑडिट लॉग्स लोड विफल', 500, err.message, 0);
+      }
+    }
+
+    async function fetchAdminCategories() {
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/v1/categories');
+        const data = await res.json();
+        const latency = Math.round(performance.now() - t0);
+        setTerminalOutput('GET /api/v1/categories (Admin View)', res.status, data, latency);
+      } catch (err) {
+        setTerminalOutput('श्रेणियां लोड विफल', 500, err.message, 0);
       }
     }
 
