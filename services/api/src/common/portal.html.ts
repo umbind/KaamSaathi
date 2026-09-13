@@ -552,7 +552,7 @@ export function getInteractivePortalHtml(): string {
       box-shadow: 0 6px 14px rgba(0,0,0,0.25);
     }
 
-    /* Interactive Quick Booking / Search Modal */
+    /* Modal Overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -658,6 +658,30 @@ export function getInteractivePortalHtml(): string {
       display: flex;
       align-items: center;
       gap: 0.85rem;
+    }
+
+    /* Share Actions */
+    .btn-share-action {
+      background: #25D366;
+      color: #FFFFFF;
+      font-weight: 800;
+      border: 2px solid #16A34A;
+      font-size: 0.92rem;
+      padding: 0.55rem 1rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 44px;
+      box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .btn-share-action:hover {
+      background: #1EBE5D;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(37, 211, 102, 0.45);
     }
 
     /* Directory Filter Tabs */
@@ -825,12 +849,16 @@ export function getInteractivePortalHtml(): string {
     .btn-provider-action {
       width: 100%;
       font-weight: 900;
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       padding: 0.75rem 1rem;
       border-radius: var(--radius-sm);
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
     }
 
     /* Live Interactive Pilot Console */
@@ -1380,6 +1408,60 @@ export function getInteractivePortalHtml(): string {
       </div>
     </div>
 
+    <!-- Digital Visiting Card & Profile Share Modal -->
+    <div id="shareProfileModal" class="modal-overlay">
+      <div class="modal-box" style="max-width:520px;">
+        <div class="modal-header" style="background:linear-gradient(135deg, #065F46 0%, #047857 100%);">
+          <h3>📲 डिजिटल प्रोफ़ाइल शेयर करें</h3>
+          <button class="btn-close-modal" onclick="closeShareModal()">✕</button>
+        </div>
+        <div class="modal-body">
+          <!-- Visiting Card Preview -->
+          <div style="background:linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%); color:white; border-radius:14px; padding:1.5rem; border:2px solid #F59E0B; box-shadow:0 10px 25px rgba(0,0,0,0.25); margin-bottom:1.5rem; position:relative;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div>
+                <div style="font-size:0.75rem; background:#F59E0B; color:black; font-weight:900; padding:0.2rem 0.55rem; border-radius:4px; display:inline-block; margin-bottom:0.5rem;">
+                  कामसाथी सत्यापित डिजिटल कार्ड
+                </div>
+                <h4 id="shareModalName" style="font-size:1.4rem; font-weight:900;">रमेश चंद्र वर्मा</h4>
+                <div id="shareModalTrade" style="font-size:0.95rem; color:#93C5FD; font-weight:700;">वर्मा इलेक्ट्रिकल्स • गोमती नगर, लखनऊ</div>
+              </div>
+              <div style="background:#10B981; color:white; font-weight:900; padding:0.4rem 0.75rem; border-radius:8px; font-size:0.9rem; text-align:center;">
+                <div id="shareModalRating">★ 4.8</div>
+                <div style="font-size:0.7rem; opacity:0.9;">सत्यापित</div>
+              </div>
+            </div>
+            <div style="margin-top:1rem; border-top:1px solid rgba(255,255,255,0.2); padding-top:0.75rem; display:flex; gap:0.5rem; flex-wrap:wrap; font-size:0.78rem;">
+              <span style="background:rgba(255,255,255,0.15); padding:0.2rem 0.5rem; border-radius:4px;">✓ सरकारी पहचान पत्र सत्यापित</span>
+              <span style="background:rgba(255,255,255,0.15); padding:0.2rem 0.5rem; border-radius:4px;">✓ 0% प्लेटफ़ॉर्म कमीशन</span>
+              <span style="background:rgba(255,255,255,0.15); padding:0.2rem 0.5rem; border-radius:4px;">✓ सीधा भुगतान (Cash/UPI)</span>
+            </div>
+          </div>
+
+          <!-- Share on WhatsApp CTA -->
+          <div style="margin-bottom:1.25rem;">
+            <a id="shareModalWhatsappBtn" href="#" target="_blank" class="btn-share-action" style="display:flex; width:100%; text-decoration:none; padding:0.95rem; font-size:1.05rem; border-radius:10px;">
+              <span>🟢 सीधे WhatsApp पर शेयर करें</span>
+            </a>
+          </div>
+
+          <!-- Copy Link Box -->
+          <div class="modal-step-title">या लिंक कॉपी करके कहीं भी भेजें:</div>
+          <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+            <input type="text" id="shareModalLinkInput" class="console-input" style="margin-bottom:0; background:#F8FAFC; color:#0F172A; border-color:#CBD5E1; font-weight:700;" readonly>
+            <button class="btn-console-action" style="background:#1E3A8A; white-space:nowrap; padding:0.75rem 1.25rem;" onclick="copyShareLink()">
+              📋 लिंक कॉपी करें
+            </button>
+          </div>
+
+          <!-- Copy Toast -->
+          <div id="shareCopyToast" style="display:none; background:#DCFCE7; border:2px solid #22C55E; color:#065F46; padding:0.75rem 1rem; border-radius:8px; font-size:0.9rem; font-weight:800; text-align:center;">
+            ✅ लिंक कॉपी हो गया! अब आप इसे WhatsApp, SMS या कहीं भी पेस्ट कर सकते हैं।
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Verified Providers Directory -->
     <div id="providers" class="section-header">
       <div>
@@ -1401,7 +1483,7 @@ export function getInteractivePortalHtml(): string {
 
     <div class="providers-grid">
       <!-- Provider 1 -->
-      <div class="provider-card provider-card-1" data-cat="cat_electrician">
+      <div id="provider-p_lucknow_elec_001" class="provider-card provider-card-1" data-cat="cat_electrician">
         <div>
           <div class="provider-head">
             <div class="provider-avatar">र</div>
@@ -1431,13 +1513,18 @@ export function getInteractivePortalHtml(): string {
             </div>
           </div>
         </div>
-        <button class="btn-provider-action" onclick="openBookingModal('cat_electrician', 'बिजली मिस्त्री (Electrician)', '⚡', 150, ['पंखा रिपेयर', 'स्विच-सॉकेट', 'MCB ट्रिपिंग'])">
-          ⚡ कोटेशन का अनुरोध भेजें
-        </button>
+        <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+          <button class="btn-provider-action" style="flex:2;" onclick="openBookingModal('cat_electrician', 'बिजली मिस्त्री (Electrician)', '⚡', 150, ['पंखा रिपेयर', 'स्विच-सॉकेट', 'MCB ट्रिपिंग'])">
+            ⚡ कोटेशन मंगवाएं
+          </button>
+          <button class="btn-share-action" style="flex:1;" onclick="shareProviderProfile('p_lucknow_elec_001', 'रमेश चंद्र वर्मा', 'वर्मा इलेक्ट्रिकल्स', 'गोमती नगर, लखनऊ', '4.8', '56')">
+            📲 शेयर करें
+          </button>
+        </div>
       </div>
 
       <!-- Provider 2 -->
-      <div class="provider-card provider-card-2" data-cat="cat_plumber">
+      <div id="provider-p_lucknow_plum_001" class="provider-card provider-card-2" data-cat="cat_plumber">
         <div>
           <div class="provider-head">
             <div class="provider-avatar">सु</div>
@@ -1467,13 +1554,18 @@ export function getInteractivePortalHtml(): string {
             </div>
           </div>
         </div>
-        <button class="btn-provider-action" onclick="openBookingModal('cat_plumber', 'नल मिस्त्री / प्लंबर (Plumber)', '💧', 150, ['नल लीकेज', 'मोटर रिपेयर', 'टंकी फिटिंग'])">
-          💧 कोटेशन का अनुरोध भेजें
-        </button>
+        <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+          <button class="btn-provider-action" style="flex:2;" onclick="openBookingModal('cat_plumber', 'नल मिस्त्री / प्लंबर (Plumber)', '💧', 150, ['नल लीकेज', 'मोटर रिपेयर', 'टंकी फिटिंग'])">
+            💧 कोटेशन मंगवाएं
+          </button>
+          <button class="btn-share-action" style="flex:1;" onclick="shareProviderProfile('p_lucknow_plum_001', 'सुरेश कुमार यादव', 'यादव सेनेटरी एवं प्लंबिंग', 'आलमबाग, लखनऊ', '4.7', '48')">
+            📲 शेयर करें
+          </button>
+        </div>
       </div>
 
       <!-- Provider 3 -->
-      <div class="provider-card provider-card-3" data-cat="cat_appliance">
+      <div id="provider-p_lucknow_hvac_001" class="provider-card provider-card-3" data-cat="cat_appliance">
         <div>
           <div class="provider-head">
             <div class="provider-avatar">मो</div>
@@ -1503,9 +1595,14 @@ export function getInteractivePortalHtml(): string {
             </div>
           </div>
         </div>
-        <button class="btn-provider-action" onclick="openBookingModal('cat_appliance', 'AC व उपकरण मरम्मत (Appliance Care)', '❄️', 200, ['AC सर्विस', 'गैस चार्जिंग', 'फ्रिज रिपेयर'])">
-          ❄️ कोटेशन का अनुरोध भेजें
-        </button>
+        <div style="display:flex; gap:0.6rem; margin-top:1rem;">
+          <button class="btn-provider-action" style="flex:2;" onclick="openBookingModal('cat_appliance', 'AC व उपकरण मरम्मत (Appliance Care)', '❄️', 200, ['AC सर्विस', 'गैस चार्जिंग', 'फ्रिज रिपेयर'])">
+            ❄️ कोटेशन मंगवाएं
+          </button>
+          <button class="btn-share-action" style="flex:1;" onclick="shareProviderProfile('p_lucknow_hvac_001', 'मोहम्मद इमरान', 'इमरान कूल केयर एवं AC', 'हजरतगंज, लखनऊ', '4.9', '72')">
+            📲 शेयर करें
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1589,6 +1686,9 @@ export function getInteractivePortalHtml(): string {
               <button class="btn-console-action" onclick="fetchProviderProfile()">📜 प्रदाता प्रोफ़ाइल</button>
               <button class="btn-console-action" onclick="fetchProviderLeads()">🔔 नए कार्य अवसर (Leads)</button>
               <button class="btn-console-action" onclick="fetchCategories()">📂 श्रेणियां सूची (Categories)</button>
+              <button class="btn-console-action" style="background:#25D366; border-color:#16A34A; color:#000; font-weight:900;" onclick="shareProviderProfile('p_lucknow_elec_001', 'रमेश चंद्र वर्मा', 'वर्मा इलेक्ट्रिकल्स', 'गोमती नगर, लखनऊ', '4.8', '56')">
+                📲 मेरी प्रोफ़ाइल शेयर करें (WhatsApp)
+              </button>
             </div>
           </div>
 
@@ -1623,7 +1723,7 @@ export function getInteractivePortalHtml(): string {
             <span id="terminalStatusBadge" style="color:#22C55E;">IDLE</span>
           </div>
           <div id="terminalOutput" class="terminal-code">// कामसाथी इंटरएक्टिव API कंसोल तैयार है।
-// किसी भी सेवा कार्ड के 'खोजें' बटन पर क्लिक करके सीधे मोडल से अनुरोध दर्ज करें।
+// किसी भी सेवा कार्ड के 'खोजें' या 'शेयर करें' बटन पर क्लिक करके सीधे मोडल का परीक्षण करें।
 // सभी एंडपॉइंट्स वास्तविक इन-मेमोरी टेस्ट डेटाबेस से जुड़े हैं।</div>
         </div>
       </div>
@@ -1802,6 +1902,75 @@ export function getInteractivePortalHtml(): string {
         }
       });
     }
+
+    // Share Profile & WhatsApp Functions
+    function shareProviderProfile(id, name, trade, location, rating, jobs) {
+      const shareModal = document.getElementById('shareProfileModal');
+      if (!shareModal) return;
+
+      const profileUrl = window.location.origin + '/#provider-' + id;
+      const shareText = 'नमस्ते! कामसाथी मंच पर ' + name + ' (' + trade + ', ' + location + ') की सत्यापित प्रोफाइल देखें। रेटिंग: ★ ' + rating + ' (' + jobs + ' कार्य पूर्ण)। सीधे काम बुक करने या दरें देखने के लिए लिंक खोलें: ' + profileUrl;
+
+      document.getElementById('shareModalName').innerText = name;
+      document.getElementById('shareModalTrade').innerText = trade + ' • ' + location;
+      document.getElementById('shareModalRating').innerText = '★ ' + rating;
+      document.getElementById('shareModalLinkInput').value = profileUrl;
+
+      const whatsappBtn = document.getElementById('shareModalWhatsappBtn');
+      if (whatsappBtn) {
+        whatsappBtn.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareText);
+      }
+
+      document.getElementById('shareCopyToast').style.display = 'none';
+      shareModal.classList.add('active');
+
+      if (navigator.share && /mobile/i.test(navigator.userAgent)) {
+        navigator.share({
+          title: name + ' - कामसाथी सत्यापित कारीगर',
+          text: shareText,
+          url: profileUrl
+        }).catch(function(e) { console.log('Share dismissed', e); });
+      }
+    }
+
+    function closeShareModal() {
+      const shareModal = document.getElementById('shareProfileModal');
+      if (shareModal) shareModal.classList.remove('active');
+    }
+
+    function copyShareLink() {
+      const input = document.getElementById('shareModalLinkInput');
+      if (!input) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value).then(showShareToast);
+      } else {
+        input.select();
+        document.execCommand('copy');
+        showShareToast();
+      }
+    }
+
+    function showShareToast() {
+      const toast = document.getElementById('shareCopyToast');
+      if (toast) {
+        toast.style.display = 'block';
+        setTimeout(function() { toast.style.display = 'none'; }, 3500);
+      }
+    }
+
+    // URL Hash listener for direct shared link
+    window.addEventListener('DOMContentLoaded', function() {
+      if (window.location.hash && window.location.hash.startsWith('#provider-')) {
+        const targetId = window.location.hash.substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          setTimeout(function() {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+            targetEl.style.boxShadow = '0 0 0 6px #F59E0B';
+          }, 400);
+        }
+      }
+    });
 
     async function submitModalRequest() {
       const selectedPills = document.querySelectorAll('#modalProblemTags .problem-tag-pill.selected');
