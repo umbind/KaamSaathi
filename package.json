@@ -6,7 +6,8 @@
   "scripts": {
     "build": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" build",
     "test": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" test",
-    "lint": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" lint"
+    "lint": "pnpm --filter \"./packages/**\" --filter \"./services/**\" --filter \"./apps/admin\" --filter \"./apps/web\" lint",
+    "seed:pilot": "pnpm --filter @kaamsaathi/api build && pnpm --filter @kaamsaathi/api seed:pilot"
   },
   "devDependencies": {
     "typescript": "^5.6.3"
